@@ -1,0 +1,17 @@
+[
+  {
+    "order": 1,
+    "name": "妹纸",
+    "type": "福利"
+  },
+  {
+    "order": 2,
+    "name": "随机",
+    "type": "random"
+  },
+  {
+    "order": 3,
+    "name": "All",
+    "type": "all"
+  }
+]
