@@ -1,5 +1,8 @@
 package com.blanke.simplegank.app;
 
+import com.blanke.simplegank.core.retrofit.GankApi;
+import com.blanke.simplegank.core.retrofit.RetroFitModule;
+
 import dagger.Component;
 
 /**
@@ -7,8 +10,9 @@ import dagger.Component;
  */
 
 
-@Component(modules = {AppModule.class})
+@Component(modules = {AppModule.class, RetroFitModule.class})
 public interface AppComponent {
     void inject(BaseApplication app);
 
+    GankApi getGankApi();
 }

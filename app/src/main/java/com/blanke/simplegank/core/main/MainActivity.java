@@ -1,4 +1,4 @@
-package com.blanke.simplegank.main;
+package com.blanke.simplegank.core.main;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,6 +20,8 @@ import com.blanke.simplegank.bean.CateGoryBean;
 import com.blanke.simplegank.consts.StaticData;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import butterknife.Bind;
@@ -39,7 +41,7 @@ public class MainActivity extends BaseActivity {
     FloatingActionButton fab;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
 
-    private final Set<CateGoryBean> mCateGoryBeens = StaticData.getCateGoryBeens();//类别
+    private Set<CateGoryBean> mCateGoryBeens;//类别
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,14 +53,15 @@ public class MainActivity extends BaseActivity {
         mActionBarDrawerToggle = new ActionBarDrawerToggle(this, activityMainDrawerlayout, toolbar, R.string.open, R.string.close);
         mActionBarDrawerToggle.syncState();
         activityMainDrawerlayout.setDrawerListener(mActionBarDrawerToggle);
-
+        mCateGoryBeens = StaticData.getCateGoryBeens();
+        List<CateGoryBean> list = new ArrayList<>(mCateGoryBeens);
         activityMainNavigation.setNavigationItemSelectedListener(item -> {
             item.setChecked(true);
-            int id = item.getItemId();
-//            switch (id) {
-//                case R.id.menu_navigation_news:
-            replaceMeiZiFragment();
-//            }
+            int index = item.getOrder();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.activity_main_framelayout, CateGoryFragment.getInstance(list.get(index)))
+                    .commit();
+
             activityMainDrawerlayout.closeDrawers();
             return true;
         });
@@ -71,7 +74,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void replaceMeiZiFragment() {
-//        getSupportFragmentManager().beginTransaction().replace(R.id.activity_main_framelayout, new NewCategoryFragment()).commit();
+//        getSupportFragmentManager().beginTransaction().replace(R.id.activity_main_framelayout, ).commit();
     }
 
     private void replaceFragment() {

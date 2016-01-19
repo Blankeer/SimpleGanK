@@ -2,16 +2,19 @@
   {
     "order": 1,
     "name": "妹纸",
-    "type": "福利"
+    "type": "type_meizi",
+    "path": "福利"
   },
   {
     "order": 2,
     "name": "随机",
-    "type": "random"
+    "path": "random",
+    "type": "type_random"
   },
   {
     "order": 3,
     "name": "All",
-    "type": "all"
+    "type": "type_all",
+    "path": "all"
   }
 ]

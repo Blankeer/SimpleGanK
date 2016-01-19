@@ -4,4 +4,11 @@
     <string name="close">close</string>
     <string name="action_settings">Settings</string>
     <string name="config_name">config.json</string>
+    <string name="type_meizi">meizi</string>
+    <string name="type_android">android</string>
+    <string name="type_ios">ios</string>
+    <string name="type_video">video</string>
+    <string name="type_qianduan">qianduan</string>
+    <string name="type_all">all</string>
+    <string name="type_random">random</string>
 </resources>

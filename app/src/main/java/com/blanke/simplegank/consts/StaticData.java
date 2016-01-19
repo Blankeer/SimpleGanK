@@ -15,11 +15,15 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.TreeSet;
 
+import butterknife.BindString;
+
 /**
  * Created by blanke on 16-1-18.
  */
 public class StaticData {
-    private static TreeSet<CateGoryBean> cateGoryBeens = new TreeSet<>();
+    public static final String ROOT_URL = "http://gank.avosapps.com/";
+    public static final String GANK_URL = "api/data/";
+    private static TreeSet<CateGoryBean> cateGoryBeens = null;
 
     /**
      * 从config.json中读取分类配置
@@ -28,10 +32,21 @@ public class StaticData {
      * @throws IOException
      */
     public static void init(Context context) throws IOException {
+        if (cateGoryBeens != null) {
+            return;
+        }
+        cateGoryBeens = new TreeSet<>();
         InputStream is = context.getAssets().open(ResUtils.getResString(context, R.string.config_name));
         Gson gson = new Gson();
-        cateGoryBeens.addAll(gson.fromJson(new InputStreamReader(is), new TypeToken<List<CateGoryBean>>() {
-        }.getType()));
+        List<CateGoryBean> list = gson.fromJson(new InputStreamReader(is), new TypeToken<List<CateGoryBean>>() {
+        }.getType());
+        for (CateGoryBean item : list) {
+            item.setType(ResUtils.getResStringByName(context, item.getType()));//读取type
+//            item.setIconResId(ResUtils.getResDrawableIdByName(context, item.getIconName()));
+            item.setLayoutResId(R.layout.item_cate_recycler);
+            KLog.d(item.getType()+item.getPath());
+            cateGoryBeens.add(item);
+        }
         KLog.d("获取到配置信息," + cateGoryBeens);
     }
 

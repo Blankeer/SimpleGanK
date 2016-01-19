@@ -1,22 +1,21 @@
 package com.blanke.simplegank.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by blanke on 16-1-18.
  * 分类：福利 | Android | iOS | 休息视频 | 拓展资源 | 前端 | all |随机
  */
-public class CateGoryBean implements Comparable<CateGoryBean> {
+public class CateGoryBean implements Comparable<CateGoryBean>, Parcelable {
     private int order;//排序
     private String name;
-    private String type;//url的type
+    private String type;
+    private String path;//url
     private int id;
-    private String iconName;
-
-    public CateGoryBean(int id, String name, int order, String type) {
-        this.id = id;
-        this.name = name;
-        this.order = order;
-        this.type = type;
-    }
+    private String iconName;//图标资源name
+    private int iconResId;//图标资源id
+    private int layoutResId;//layout布局id
 
     @Override
     public boolean equals(Object o) {
@@ -44,6 +43,22 @@ public class CateGoryBean implements Comparable<CateGoryBean> {
                 '}';
     }
 
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public int getIconResId() {
+        return iconResId;
+    }
+
+    public void setIconResId(int iconResId) {
+        this.iconResId = iconResId;
+    }
+
     public int getId() {
         return id;
     }
@@ -58,6 +73,14 @@ public class CateGoryBean implements Comparable<CateGoryBean> {
 
     public String getIconName() {
         return iconName;
+    }
+
+    public int getLayoutResId() {
+        return layoutResId;
+    }
+
+    public void setLayoutResId(int layoutResId) {
+        this.layoutResId = layoutResId;
     }
 
     public void setIconName(String iconName) {
@@ -88,4 +111,46 @@ public class CateGoryBean implements Comparable<CateGoryBean> {
     public int compareTo(CateGoryBean another) {
         return order - another.order;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.order);
+        dest.writeString(this.name);
+        dest.writeString(this.type);
+        dest.writeString(this.path);
+        dest.writeInt(this.id);
+        dest.writeString(this.iconName);
+        dest.writeInt(this.iconResId);
+        dest.writeInt(this.layoutResId);
+    }
+
+    public CateGoryBean() {
+    }
+
+    protected CateGoryBean(Parcel in) {
+        this.order = in.readInt();
+        this.name = in.readString();
+        this.type = in.readString();
+        this.path = in.readString();
+        this.id = in.readInt();
+        this.iconName = in.readString();
+        this.iconResId = in.readInt();
+        this.layoutResId = in.readInt();
+    }
+
+    public static final Parcelable.Creator<CateGoryBean> CREATOR = new Parcelable.Creator<CateGoryBean>() {
+        public CateGoryBean createFromParcel(Parcel source) {
+            return new CateGoryBean(source);
+        }
+
+        public CateGoryBean[] newArray(int size) {
+            return new CateGoryBean[size];
+        }
+    };
 }
