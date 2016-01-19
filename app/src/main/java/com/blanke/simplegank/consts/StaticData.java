@@ -15,8 +15,6 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.TreeSet;
 
-import butterknife.BindString;
-
 /**
  * Created by blanke on 16-1-18.
  */
@@ -31,7 +29,7 @@ public class StaticData {
      * @param context
      * @throws IOException
      */
-    public static void init(Context context) throws IOException {
+    public synchronized static void init(Context context) throws IOException {
         if (cateGoryBeens != null) {
             return;
         }
@@ -44,7 +42,7 @@ public class StaticData {
             item.setType(ResUtils.getResStringByName(context, item.getType()));//读取type
 //            item.setIconResId(ResUtils.getResDrawableIdByName(context, item.getIconName()));
             item.setLayoutResId(R.layout.item_cate_recycler);
-            KLog.d(item.getType()+item.getPath());
+            KLog.d(item.getType() + item.getPath());
             cateGoryBeens.add(item);
         }
         KLog.d("获取到配置信息," + cateGoryBeens);

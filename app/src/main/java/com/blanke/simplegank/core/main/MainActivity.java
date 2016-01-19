@@ -22,7 +22,6 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -41,7 +40,8 @@ public class MainActivity extends BaseActivity {
     FloatingActionButton fab;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
 
-    private Set<CateGoryBean> mCateGoryBeens;//类别
+    private List<CateGoryBean> mCateGoryBeens;//分类
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,15 +53,10 @@ public class MainActivity extends BaseActivity {
         mActionBarDrawerToggle = new ActionBarDrawerToggle(this, activityMainDrawerlayout, toolbar, R.string.open, R.string.close);
         mActionBarDrawerToggle.syncState();
         activityMainDrawerlayout.setDrawerListener(mActionBarDrawerToggle);
-        mCateGoryBeens = StaticData.getCateGoryBeens();
-        List<CateGoryBean> list = new ArrayList<>(mCateGoryBeens);
+        mCateGoryBeens = new ArrayList<>(StaticData.getCateGoryBeens());
         activityMainNavigation.setNavigationItemSelectedListener(item -> {
             item.setChecked(true);
-            int index = item.getOrder();
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.activity_main_framelayout, CateGoryFragment.getInstance(list.get(index)))
-                    .commit();
-
+            replaceFragment(item.getOrder());
             activityMainDrawerlayout.closeDrawers();
             return true;
         });
@@ -69,22 +64,30 @@ public class MainActivity extends BaseActivity {
 
         setTranslucentStatus();
 
-        replaceMeiZiFragment();
         initNavigationMenu();
+
+        replaceFragment(0);
     }
 
-    private void replaceMeiZiFragment() {
-//        getSupportFragmentManager().beginTransaction().replace(R.id.activity_main_framelayout, ).commit();
-    }
 
-    private void replaceFragment() {
+    private void replaceFragment(int index) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.activity_main_framelayout, CateGoryFragment.getInstance(mCateGoryBeens.get(index)))
+                .commit();
 
     }
 
     private void initNavigationMenu() {
         Menu menu = activityMainNavigation.getMenu();
+        int random = (int) (Math.random() * 9 + 1);
+        int idbase = random << 10;
+        int i = 0;
         for (CateGoryBean item : mCateGoryBeens) {
-            MenuItem temp = menu.add(item.getName());
+            MenuItem temp = menu.add(0, idbase + i, i, item.getName());
+            if (i == 0) {
+                temp.setChecked(true);
+            }
+            i++;
         }
         menu.setGroupCheckable(0, true, true);//single
     }

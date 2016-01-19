@@ -7,7 +7,7 @@ public class GankBean {
 
     /**
      * who : mthli
-     * publishedAt : 2016-01-18T04:58:00.925Z
+         * publishedAt : 2016-01-18T04:58:00.925Z
      * desc : 动态生成三角形背景的库
      * type : Android
      * url : https://github.com/manolovn/trianglify

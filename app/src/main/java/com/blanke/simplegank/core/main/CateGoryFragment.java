@@ -19,7 +19,6 @@ import com.blanke.simplegank.bean.GankBean;
 import com.blanke.simplegank.core.main.dagger.CateGoryMVPModule;
 import com.blanke.simplegank.core.main.dagger.DaggerCateGoryComponent;
 import com.blanke.simplegank.core.main.presenter.CateGoryPresenter;
-import com.blanke.simplegank.core.retrofit.RetroFitModule;
 import com.blanke.simplegank.core.main.view.CateGoryView;
 
 import java.util.List;
@@ -114,6 +113,11 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         loadData(true);
     }
 
+    @Override
+    public void stopRefreshing() {
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
 
     class RecyclerAdapter extends RecyclerView.Adapter<ViewHolder> {
         private List<GankBean> data;
@@ -137,7 +141,9 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             GankBean bean = data.get(position);
-            holder.mteTextView.setText(bean.getDesc());
+            holder.mTextViewTitle.setText(bean.getDesc());
+            holder.mTextViewTag.setText(bean.getType());
+            holder.mTextViewTime.setText(bean.getUpdatedAt());
         }
 
         @Override
@@ -147,8 +153,13 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.item_cate_text)
-        TextView mteTextView;
+        @Bind(R.id.item_cate_card_title)
+        TextView mTextViewTitle;
+        @Bind(R.id.item_cate_card_tag)
+        TextView mTextViewTag;
+        @Bind(R.id.item_cate_card_time)
+        TextView mTextViewTime;
+
 
         public ViewHolder(View itemView) {
             super(itemView);

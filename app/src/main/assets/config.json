@@ -16,5 +16,11 @@
     "name": "All",
     "type": "type_all",
     "path": "all"
+  },
+  {
+    "order": 4,
+    "name": "Android",
+    "type": "type_android",
+    "path": "Android"
   }
 ]
