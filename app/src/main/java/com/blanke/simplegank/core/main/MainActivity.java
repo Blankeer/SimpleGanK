@@ -3,7 +3,6 @@ package com.blanke.simplegank.core.main;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -14,10 +13,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
-import com.blanke.simplegank.R;
 import com.blanke.simplegank.base.BaseActivity;
 import com.blanke.simplegank.bean.CateGoryBean;
 import com.blanke.simplegank.consts.StaticData;
+import com.blanke.simplegank2.R;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.ArrayList;
@@ -106,8 +105,8 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.fab)
     public void onFabClick(View v) {
-        Snackbar.make(v, "snack  ", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+//        Snackbar.make(v, "snack  ", Snackbar.LENGTH_LONG)
+//                .setAction("Action", null).show();
     }
 
     @Override

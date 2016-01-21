@@ -8,11 +8,11 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.blanke.simplegank.R;
 import com.blanke.simplegank.app.BaseApplication;
 import com.blanke.simplegank.base.BaseMvpLceFragment;
 import com.blanke.simplegank.bean.CateGoryBean;
@@ -21,6 +21,7 @@ import com.blanke.simplegank.core.main.dagger.CateGoryMVPModule;
 import com.blanke.simplegank.core.main.dagger.DaggerCateGoryComponent;
 import com.blanke.simplegank.core.main.presenter.CateGoryPresenter;
 import com.blanke.simplegank.core.main.view.CateGoryView;
+import com.blanke.simplegank2.R;
 import com.socks.library.KLog;
 
 import java.util.List;
@@ -33,7 +34,8 @@ import cn.iwgang.familiarrecyclerview.FamiliarRecyclerView;
 import cn.iwgang.familiarrecyclerview.FamiliarRecyclerViewOnScrollListener;
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
-import static android.view.ViewGroup.*;
+import static android.view.ViewGroup.LayoutParams;
+import static android.view.ViewGroup.OnTouchListener;
 
 /**
  * Created by Blanke on 16-1-19.
@@ -103,6 +105,25 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
+        mRecyclerview.setOnTouchListener(new OnTouchListener() {
+            MotionEvent downEvent;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int lastPosition = mRecyclerview.getLastVisiblePosition();
+                KLog.d("lastPosition=" + lastPosition);
+                if (lastPosition == mAdapter.getData().size()) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        downEvent = event;
+                    } else {
+                        float dy =downEvent.getRawY()-event.getRawY();
+                        KLog.d("dy="+dy);
+
+                    }
+                }
+                return false;
+            }
+        });
 
         loadData(false);
     }
