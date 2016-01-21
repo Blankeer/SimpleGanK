@@ -13,10 +13,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import com.blanke.simplegank.R;
 import com.blanke.simplegank.base.BaseActivity;
 import com.blanke.simplegank.bean.CateGoryBean;
 import com.blanke.simplegank.consts.StaticData;
-import com.blanke.simplegank2.R;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.ArrayList;

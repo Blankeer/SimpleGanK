@@ -7,10 +7,10 @@
     app:spb_colors="@array/loading_colors_more"
     app:spb_mirror_mode="true"
     app:spb_progressiveStart_activated="true"
-    app:spb_progressiveStart_speed="3"
+    app:spb_progressiveStart_speed="2.2"
     app:spb_progressiveStop_speed="2"
     app:spb_reversed="true"
-    app:spb_sections_count="2"
-    app:spb_speed="2.2"
+    app:spb_sections_count="3"
+    app:spb_speed="1.5"
     app:spb_stroke_separator_length="1dp"
     app:spb_stroke_width="5dp" />

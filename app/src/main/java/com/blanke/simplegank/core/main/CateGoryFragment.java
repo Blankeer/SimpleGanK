@@ -11,8 +11,11 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.blanke.simplegank.R;
 import com.blanke.simplegank.app.BaseApplication;
 import com.blanke.simplegank.base.BaseMvpLceFragment;
 import com.blanke.simplegank.bean.CateGoryBean;
@@ -21,7 +24,6 @@ import com.blanke.simplegank.core.main.dagger.CateGoryMVPModule;
 import com.blanke.simplegank.core.main.dagger.DaggerCateGoryComponent;
 import com.blanke.simplegank.core.main.presenter.CateGoryPresenter;
 import com.blanke.simplegank.core.main.view.CateGoryView;
-import com.blanke.simplegank2.R;
 import com.socks.library.KLog;
 
 import java.util.List;
@@ -33,6 +35,7 @@ import butterknife.ButterKnife;
 import cn.iwgang.familiarrecyclerview.FamiliarRecyclerView;
 import cn.iwgang.familiarrecyclerview.FamiliarRecyclerViewOnScrollListener;
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
+import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
 
 import static android.view.ViewGroup.LayoutParams;
 import static android.view.ViewGroup.OnTouchListener;
@@ -84,6 +87,9 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         footLoadView = (SmoothProgressBar) LayoutInflater.from(getActivity()).inflate(R.layout.view_loading_smooth, null);
         LayoutParams layoutparams = new RecyclerView.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         footLoadView.setLayoutParams(layoutparams);
+        SmoothProgressDrawable indeterminateDrawable = (SmoothProgressDrawable) footLoadView.getIndeterminateDrawable();
+        indeterminateDrawable.stop();
+        footLoadView.setInterpolator(new DecelerateInterpolator()) ;
         mRecyclerview.addFooterView(footLoadView);
         mRecyclerview.addOnScrollListener(new FamiliarRecyclerViewOnScrollListener(mRecyclerview.getLayoutManager()) {
             @Override
@@ -93,7 +99,7 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
 
             @Override
             public void onScrolledToBottom() {
-                footLoadView.progressiveStart();
+//                footLoadView.progressiveStart();
                 loadData(true);
 //                mRecyclerview.postDelayed(() -> footLoadView.progressiveStop(), 2000);
             }
@@ -105,20 +111,24 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
+        final float[] downRawY = {0};
+
         mRecyclerview.setOnTouchListener(new OnTouchListener() {
-            MotionEvent downEvent;
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 int lastPosition = mRecyclerview.getLastVisiblePosition();
-                KLog.d("lastPosition=" + lastPosition);
-                if (lastPosition == mAdapter.getData().size()) {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        downEvent = event;
-                    } else {
-                        float dy =downEvent.getRawY()-event.getRawY();
-                        KLog.d("dy="+dy);
-
+                if (downRawY[0] == 0) {
+                    downRawY[0] = event.getRawY();
+                }
+                if (lastPosition == mAdapter.getData().size() - 1) {
+                    if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                        float dy = downRawY[0] - event.getRawY();
+                        footLoadView.setProgress((int) dy);
+                        if (footLoadView.getProgress() == 100) {
+                            downRawY[0] = 0;
+                            mRecyclerview.postDelayed(() -> footLoadView.progressiveStop(), 2000);
+                        }
                     }
                 }
                 return false;

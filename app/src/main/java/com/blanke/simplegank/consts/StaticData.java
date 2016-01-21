@@ -2,9 +2,9 @@ package com.blanke.simplegank.consts;
 
 import android.content.Context;
 
+import com.blanke.simplegank.R;
 import com.blanke.simplegank.bean.CateGoryBean;
 import com.blanke.simplegank.utils.ResUtils;
-import com.blanke.simplegank2.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.socks.library.KLog;
