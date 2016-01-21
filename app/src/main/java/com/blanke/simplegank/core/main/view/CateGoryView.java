@@ -11,4 +11,5 @@ import java.util.List;
 public interface CateGoryView extends MvpLceView<List<GankBean>> {
 
     void stopRefreshing();
+    void onFail(Throwable e);
 }

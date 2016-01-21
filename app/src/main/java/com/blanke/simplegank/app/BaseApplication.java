@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.blanke.simplegank.consts.StaticData;
+import com.socks.library.KLog;
 
 import java.io.IOException;
 
@@ -17,12 +18,14 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        initComponent();
+        KLog.d();
         initData();
+        initComponent();
     }
 
     private void initData() {
         try {
+            KLog.d();
             StaticData.init(this);
         } catch (IOException e) {
             e.printStackTrace();

@@ -11,4 +11,5 @@
     <string name="type_qianduan">qianduan</string>
     <string name="type_all">all</string>
     <string name="type_random">random</string>
+    <string name="msg_test">test</string>
 </resources>

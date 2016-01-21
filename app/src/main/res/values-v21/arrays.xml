@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer-array name="loading_colors">
-        <item>@color/colorAccent</item>
         <item>@color/colorPrimary</item>
+        <item>@color/colorAccent</item>
+    </integer-array>
+    <integer-array name="loading_colors_more">
+        <item>@color/colorPrimary</item>
+        <item>@color/colorAccent</item>
+        <item>@color/cpb_default_color</item>
+        <item>@android:color/holo_green_dark</item>
     </integer-array>
 </resources>

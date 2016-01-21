@@ -2,6 +2,7 @@ package com.blanke.simplegank.core.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +21,7 @@ import com.blanke.simplegank.core.main.dagger.CateGoryMVPModule;
 import com.blanke.simplegank.core.main.dagger.DaggerCateGoryComponent;
 import com.blanke.simplegank.core.main.presenter.CateGoryPresenter;
 import com.blanke.simplegank.core.main.view.CateGoryView;
+import com.socks.library.KLog;
 
 import java.util.List;
 
@@ -27,6 +29,11 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cn.iwgang.familiarrecyclerview.FamiliarRecyclerView;
+import cn.iwgang.familiarrecyclerview.FamiliarRecyclerViewOnScrollListener;
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
+
+import static android.view.ViewGroup.*;
 
 /**
  * Created by Blanke on 16-1-19.
@@ -35,7 +42,7 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
 
     private final static String KEY_CATEGORY = "category";
     @Bind(R.id.fragment_cate_recyclerview)
-    RecyclerView mRecyclerview;
+    FamiliarRecyclerView mRecyclerview;
     @Bind(R.id.contentView)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -44,6 +51,7 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
 
     @Inject
     CateGoryPresenter mCateGoryPresenter;
+    private SmoothProgressBar footLoadView;
 
     public static CateGoryFragment getInstance(CateGoryBean cateGoryBean) {
         CateGoryFragment fragment = new CateGoryFragment();
@@ -55,6 +63,7 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        KLog.d();
         super.onCreate(savedInstanceState);
         mCateGoryBean = getArguments().getParcelable(KEY_CATEGORY);
         DaggerCateGoryComponent.builder()
@@ -70,8 +79,30 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         mRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new RecyclerAdapter();
         mRecyclerview.setAdapter(mAdapter);
+        footLoadView = (SmoothProgressBar) LayoutInflater.from(getActivity()).inflate(R.layout.view_loading_smooth, null);
+        LayoutParams layoutparams = new RecyclerView.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        footLoadView.setLayoutParams(layoutparams);
+        mRecyclerview.addFooterView(footLoadView);
+        mRecyclerview.addOnScrollListener(new FamiliarRecyclerViewOnScrollListener(mRecyclerview.getLayoutManager()) {
+            @Override
+            public void onScrolledToTop() {
 
+            }
+
+            @Override
+            public void onScrolledToBottom() {
+                footLoadView.progressiveStart();
+                loadData(true);
+//                mRecyclerview.postDelayed(() -> footLoadView.progressiveStop(), 2000);
+            }
+        });
+        mRecyclerview.setOnItemClickListener((familiarRecyclerView, view1, position) -> {
+            Snackbar.make(view1, mAdapter.getData().get(position).getDesc(), Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        });
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+
 
         loadData(false);
     }
@@ -116,6 +147,14 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
     @Override
     public void stopRefreshing() {
         mSwipeRefreshLayout.setRefreshing(false);
+        KLog.d();
+        footLoadView.progressiveStop();
+    }
+
+    @Override
+    public void onFail(Throwable e) {
+        Snackbar.make(mRecyclerview, e.toString(), Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 
 

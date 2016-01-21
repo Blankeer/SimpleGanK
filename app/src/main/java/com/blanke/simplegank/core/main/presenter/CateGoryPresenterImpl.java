@@ -41,6 +41,7 @@ public class CateGoryPresenterImpl extends CateGoryPresenter {
             getView().showError(e, pullToRefresh);
             if(pullToRefresh){
                 getView().stopRefreshing();
+                getView().onFail(e);
             }
         }
     }

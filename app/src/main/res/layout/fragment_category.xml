@@ -8,11 +8,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
+        <cn.iwgang.familiarrecyclerview.FamiliarRecyclerView
             android:id="@+id/fragment_cate_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+
+            android:layout_height="match_parent" />
     </android.support.v4.widget.SwipeRefreshLayout>
+
 
     <include layout="@layout/view_loading" />
 

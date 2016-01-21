@@ -54,3 +54,9 @@ http://p.codekk.com/detail/Android/xmuSistone/android-card-slide-panel
 
 17 ASimpleCache缓存
 https://github.com/yangfuhai/ASimpleCache
+
+18.recyclerview-animators
+https://github.com/wasabeef/recyclerview-animators
+
+19.FamiliarRecyclerView
+https://github.com/iwgang/FamiliarRecyclerView
