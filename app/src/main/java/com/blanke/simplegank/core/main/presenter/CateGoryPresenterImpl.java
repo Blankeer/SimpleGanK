@@ -3,6 +3,7 @@ package com.blanke.simplegank.core.main.presenter;
 import com.blanke.simplegank.bean.CateGoryBean;
 import com.blanke.simplegank.bean.GankBean;
 import com.blanke.simplegank.core.main.model.CateGoryModel;
+import com.socks.library.KLog;
 
 import java.util.List;
 
@@ -24,12 +25,13 @@ public class CateGoryPresenterImpl extends CateGoryPresenter {
         mCateGoryModel.loadGank(cateGory, size, page, this);
     }
 
+
     @Override
     public void onSuccess(List<GankBean> data) {
         if (isViewAttached()) {
             getView().setData(data);
             getView().showContent();
-            if(pullToRefresh){
+            if (pullToRefresh) {
                 getView().stopRefreshing();
             }
         }
@@ -39,7 +41,7 @@ public class CateGoryPresenterImpl extends CateGoryPresenter {
     public void onFail(Throwable e) {
         if (isViewAttached()) {
             getView().showError(e, pullToRefresh);
-            if(pullToRefresh){
+            if (pullToRefresh) {
                 getView().stopRefreshing();
                 getView().onFail(e);
             }

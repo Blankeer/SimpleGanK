@@ -60,3 +60,9 @@ https://github.com/wasabeef/recyclerview-animators
 
 19.FamiliarRecyclerView
 https://github.com/iwgang/FamiliarRecyclerView
+
+20.3d布局调试
+https://github.com/JakeWharton/scalpel
+
+21.内存泄露检测工具
+http://p.codekk.com/detail/Android/square/leakcanary

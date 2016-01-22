@@ -3,6 +3,7 @@ package com.blanke.simplegank.core.main;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +18,7 @@ import com.blanke.simplegank.R;
 import com.blanke.simplegank.base.BaseActivity;
 import com.blanke.simplegank.bean.CateGoryBean;
 import com.blanke.simplegank.consts.StaticData;
+import com.jakewharton.scalpel.ScalpelFrameLayout;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.ArrayList;
@@ -26,6 +28,9 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity {
+
+    @Bind(R.id.activity_main_testlayout)
+    ScalpelFrameLayout mTestLayout;
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -46,6 +51,8 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -105,8 +112,8 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.fab)
     public void onFabClick(View v) {
-//        Snackbar.make(v, "snack  ", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show();
+        Snackbar.make(v, "snack  ", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 
     @Override

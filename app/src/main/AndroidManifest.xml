@@ -3,6 +3,7 @@
     package="com.blanke.simplegank">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".app.BaseApplication"
         android:allowBackup="false"
@@ -20,6 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".test.TestLoadViewActivity"></activity>
     </application>
 
 </manifest>

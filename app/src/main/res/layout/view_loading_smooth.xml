@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fr.castorflex.android.smoothprogressbar.SmoothProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
+<com.blanke.simplegank.view.CustomSmoothProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:indeterminate="true"
     app:spb_colors="@array/loading_colors_more"
+    app:spb_interpolator="spb_interpolator_decelerate"
     app:spb_mirror_mode="true"
-    app:spb_progressiveStart_activated="true"
+    app:spb_progressiveStart_activated="false"
     app:spb_progressiveStart_speed="2.2"
     app:spb_progressiveStop_speed="2"
     app:spb_reversed="true"
     app:spb_sections_count="3"
     app:spb_speed="1.5"
     app:spb_stroke_separator_length="1dp"
-    app:spb_stroke_width="5dp" />
+    app:spb_stroke_width="6dp" />

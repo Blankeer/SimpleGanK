@@ -8,11 +8,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.blanke.simplegank.R;
@@ -24,6 +21,7 @@ import com.blanke.simplegank.core.main.dagger.CateGoryMVPModule;
 import com.blanke.simplegank.core.main.dagger.DaggerCateGoryComponent;
 import com.blanke.simplegank.core.main.presenter.CateGoryPresenter;
 import com.blanke.simplegank.core.main.view.CateGoryView;
+import com.blanke.simplegank.view.CustomSmoothProgressBar;
 import com.socks.library.KLog;
 
 import java.util.List;
@@ -34,11 +32,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.iwgang.familiarrecyclerview.FamiliarRecyclerView;
 import cn.iwgang.familiarrecyclerview.FamiliarRecyclerViewOnScrollListener;
-import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
-import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
 
 import static android.view.ViewGroup.LayoutParams;
-import static android.view.ViewGroup.OnTouchListener;
 
 /**
  * Created by Blanke on 16-1-19.
@@ -46,6 +41,7 @@ import static android.view.ViewGroup.OnTouchListener;
 public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, List<GankBean>, CateGoryView, CateGoryPresenter> implements CateGoryView, SwipeRefreshLayout.OnRefreshListener {
 
     private final static String KEY_CATEGORY = "category";
+    private static final int PAGE_COUNT = 20;
     @Bind(R.id.fragment_cate_recyclerview)
     FamiliarRecyclerView mRecyclerview;
     @Bind(R.id.contentView)
@@ -56,7 +52,11 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
 
     @Inject
     CateGoryPresenter mCateGoryPresenter;
-    private SmoothProgressBar footLoadView;
+    private CustomSmoothProgressBar footLoadView;
+
+    private boolean isFootLoading = false;
+
+    private int page = 1;
 
     public static CateGoryFragment getInstance(CateGoryBean cateGoryBean) {
         CateGoryFragment fragment = new CateGoryFragment();
@@ -84,12 +84,19 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         mRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new RecyclerAdapter();
         mRecyclerview.setAdapter(mAdapter);
-        footLoadView = (SmoothProgressBar) LayoutInflater.from(getActivity()).inflate(R.layout.view_loading_smooth, null);
+        footLoadView = (CustomSmoothProgressBar) LayoutInflater.from(getActivity()).inflate(R.layout.view_loading_smooth, null);
         LayoutParams layoutparams = new RecyclerView.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         footLoadView.setLayoutParams(layoutparams);
-        SmoothProgressDrawable indeterminateDrawable = (SmoothProgressDrawable) footLoadView.getIndeterminateDrawable();
-        indeterminateDrawable.stop();
-        footLoadView.setInterpolator(new DecelerateInterpolator()) ;
+
+
+        footLoadView.setSmoothProgressDrawableCallbacks(footLoadView.new CustomCallBack() {
+            @Override
+            public void animStop() {
+//                KLog.d("animStop");
+                isFootLoading = false;//停止
+            }
+        });
+
         mRecyclerview.addFooterView(footLoadView);
         mRecyclerview.addOnScrollListener(new FamiliarRecyclerViewOnScrollListener(mRecyclerview.getLayoutManager()) {
             @Override
@@ -99,9 +106,11 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
 
             @Override
             public void onScrolledToBottom() {
-//                footLoadView.progressiveStart();
-                loadData(true);
-//                mRecyclerview.postDelayed(() -> footLoadView.progressiveStop(), 2000);
+                if (isFootLoading == false) {
+                    footLoadView.setShow(true);
+                    isFootLoading = true;
+                    loadData(true);
+                }
             }
         });
         mRecyclerview.setOnItemClickListener((familiarRecyclerView, view1, position) -> {
@@ -113,29 +122,31 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
 
         final float[] downRawY = {0};
 
-        mRecyclerview.setOnTouchListener(new OnTouchListener() {
+//        mRecyclerview.setOnTouchListener(new OnTouchListener() {
+//
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                int lastPosition = mRecyclerview.getLastVisiblePosition();
+//                if (downRawY[0] == 0) {
+//                    downRawY[0] = event.getRawY();
+//                }
+//                if (lastPosition == mAdapter.getData().size() - 1) {
+//                    if (event.getAction() == MotionEvent.ACTION_MOVE) {
+//                        float dy = downRawY[0] - event.getRawY();
+//                        footLoadView.setProgress((int) dy);
+//                        if (footLoadView.getProgress() == 100) {
+//                            downRawY[0] = 0;
+//                            mRecyclerview.postDelayed(() -> footLoadView.progressiveStop(), 2000);
+//                        }
+//                    }
+//                }
+//                return false;
+//            }
+//        });
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                int lastPosition = mRecyclerview.getLastVisiblePosition();
-                if (downRawY[0] == 0) {
-                    downRawY[0] = event.getRawY();
-                }
-                if (lastPosition == mAdapter.getData().size() - 1) {
-                    if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                        float dy = downRawY[0] - event.getRawY();
-                        footLoadView.setProgress((int) dy);
-                        if (footLoadView.getProgress() == 100) {
-                            downRawY[0] = 0;
-                            mRecyclerview.postDelayed(() -> footLoadView.progressiveStop(), 2000);
-                        }
-                    }
-                }
-                return false;
-            }
-        });
-
+        KLog.d();
         loadData(false);
+
     }
 
     @Override
@@ -159,27 +170,34 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         return mCateGoryPresenter;
     }
 
+
     @Override
     public void setData(List<GankBean> data) {
-        mAdapter.setData(data);
+        if (page == 1) {//下拉
+            mAdapter.setData(data);
+        } else {//上啦
+            mAdapter.addData(data);
+        }
+        page++;//请求成功
         mAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void loadData(boolean pullToRefresh) {
-        mCateGoryPresenter.loadGank(pullToRefresh, mCateGoryBean, 20, 1);
+        mCateGoryPresenter.loadGank(pullToRefresh, mCateGoryBean, PAGE_COUNT, page);
     }
 
     @Override
-    public void onRefresh() {
+    public void onRefresh() {//下拉
+        page = 1;
         loadData(true);
     }
+
 
     @Override
     public void stopRefreshing() {
         mSwipeRefreshLayout.setRefreshing(false);
-        KLog.d();
-        footLoadView.progressiveStop();
+        footLoadView.postDelayed(() -> footLoadView.setShow(false), 2000);//延迟，防止刷新时间过短
     }
 
     @Override
@@ -219,6 +237,10 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         @Override
         public int getItemCount() {
             return data == null ? 0 : data.size();
+        }
+
+        public void addData(List<GankBean> data) {
+            data.addAll(data);
         }
     }
 
