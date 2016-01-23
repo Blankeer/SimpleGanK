@@ -98,4 +98,19 @@ public class GankBean {
     public String getUpdatedAt() {
         return updatedAt;
     }
+
+    @Override
+    public String toString() {
+        return "GankBean{" +
+                "who='" + who + '\'' +
+                ", publishedAt='" + publishedAt + '\'' +
+                ", desc='" + desc + '\'' +
+                ", type='" + type + '\'' +
+                ", url='" + url + '\'' +
+                ", used=" + used +
+                ", objectId='" + objectId + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", updatedAt='" + updatedAt + '\'' +
+                '}';
+    }
 }

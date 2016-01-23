@@ -42,7 +42,6 @@ public class StaticData {
             item.setType(ResUtils.getResStringByName(context, item.getType()));//读取type
 //            item.setIconResId(ResUtils.getResDrawableIdByName(context, item.getIconName()));
             item.setLayoutResId(R.layout.item_cate_recycler);
-            KLog.d(item.getType() + item.getPath());
             cateGoryBeens.add(item);
         }
         KLog.d("获取到配置信息," + cateGoryBeens);

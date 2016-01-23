@@ -3,9 +3,6 @@ package com.blanke.simplegank.view;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.view.View;
-
-import com.socks.library.KLog;
 
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
@@ -19,8 +16,7 @@ public class CustomSmoothProgressBar extends SmoothProgressBar {
         @Override
         public void onStop() {
             if (isFinishing()) {
-                KLog.d();
-                setVisibility(View.GONE);
+//                setVisibility(View.GONE);
                 animStop();
             }
         }
@@ -45,8 +41,11 @@ public class CustomSmoothProgressBar extends SmoothProgressBar {
 
     public CustomSmoothProgressBar(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        setVisibility(View.GONE);
+//        setVisibility(View.GONE);
+        progressiveStop();
+//        checkIndeterminateDrawable().stop();
     }
+
 
     public boolean isShow() {
         return isShow;
@@ -56,7 +55,7 @@ public class CustomSmoothProgressBar extends SmoothProgressBar {
 //        KLog.d("show =" + show + ", isShow=" + isShow);
         if (show == true && isShow == false) {
             progressiveStart();
-            setVisibility(View.VISIBLE);
+//            setVisibility(View.VISIBLE);
         } else if (show == false && isShow) {
             progressiveStop();
         }

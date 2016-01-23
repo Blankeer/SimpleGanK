@@ -27,20 +27,33 @@ public class LoadViewTest extends InstrumentationTestCase {
 
     public void testLoadView() throws Exception {
 //        SmoothProgressDrawable progressDrawable = (SmoothProgressDrawable) loadView.getIndeterminateDrawable();
-        Thread.sleep(2000);
-        loadView.setSmoothProgressDrawableUseGradients(true);
+        Thread.sleep(5000);
+//        loadView.setSmoothProgressDrawableUseGradients(true);
 
-        loadView.setSmoothProgressDrawableCallbacks(loadView.new CustomCallBack() {
+//        loadView.setSmoothProgressDrawableCallbacks(loadView.new CustomCallBack() {
+//            @Override
+//            public void animStop() {
+//                KLog.d();
+//            }
+//        });
+        loadView.setSmoothProgressDrawableCallbacks(new SmoothProgressDrawable.Callbacks() {
             @Override
-            public void animStop() {
+            public void onStop() {
+                KLog.d();
+            }
+
+            @Override
+            public void onStart() {
                 KLog.d();
             }
         });
         getInstrumentation().runOnMainSync(() -> loadView.setShow(true));
 
 
-        Thread.sleep(3000);
+        Thread.sleep(10000);
         getInstrumentation().runOnMainSync(() -> loadView.setShow(false));
+        Thread.sleep(5000);
+        getInstrumentation().runOnMainSync(() -> loadView.setShow(true));
 
 //        loadView.progressiveStop();
 //        progressDrawable.stop();

@@ -18,14 +18,12 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        KLog.d();
         initData();
         initComponent();
     }
 
     private void initData() {
         try {
-            KLog.d();
             StaticData.init(this);
         } catch (IOException e) {
             e.printStackTrace();
