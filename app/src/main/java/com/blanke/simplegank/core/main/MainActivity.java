@@ -18,6 +18,7 @@ import com.blanke.simplegank.R;
 import com.blanke.simplegank.base.BaseActivity;
 import com.blanke.simplegank.bean.CateGoryBean;
 import com.blanke.simplegank.consts.StaticData;
+import com.blanke.simplegank.core.category.CateGoryFragment;
 import com.jakewharton.scalpel.ScalpelFrameLayout;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 

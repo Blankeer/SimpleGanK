@@ -1,8 +1,8 @@
-package com.blanke.simplegank.core.main.presenter;
+package com.blanke.simplegank.core.category.presenter;
 
 import com.blanke.simplegank.bean.CateGoryBean;
-import com.blanke.simplegank.core.main.model.CateGoryModel;
-import com.blanke.simplegank.core.main.view.CateGoryView;
+import com.blanke.simplegank.core.category.model.CateGoryModel;
+import com.blanke.simplegank.core.category.view.CateGoryView;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 /**

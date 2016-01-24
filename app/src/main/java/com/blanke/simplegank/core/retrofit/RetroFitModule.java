@@ -1,6 +1,7 @@
 package com.blanke.simplegank.core.retrofit;
 
 import com.blanke.simplegank.consts.StaticData;
+import com.google.gson.GsonBuilder;
 
 import dagger.Module;
 import dagger.Provides;
@@ -19,7 +20,10 @@ public class RetroFitModule {
         return new Retrofit.Builder()
                 .baseUrl(StaticData.ROOT_URL)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(
+                        GsonConverterFactory.create(new GsonBuilder()
+                                .setDateFormat(StaticData.GANK_DATE_FORMAT)
+                                .create()))
                 .build()
                 .create(GankApi.class);
     }

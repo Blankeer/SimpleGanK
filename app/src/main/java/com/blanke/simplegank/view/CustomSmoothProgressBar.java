@@ -77,4 +77,15 @@ public class CustomSmoothProgressBar extends SmoothProgressBar {
             throw new RuntimeException("The drawable is not a SmoothProgressDrawable");
         return (SmoothProgressDrawable) ret;
     }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+//        super.onDetachedFromWindow();
+    }
 }

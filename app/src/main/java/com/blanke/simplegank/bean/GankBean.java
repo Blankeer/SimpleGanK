@@ -1,5 +1,7 @@
 package com.blanke.simplegank.bean;
 
+import java.util.Date;
+
 /**
  * Created by Blanke on 16-1-19.
  */
@@ -7,7 +9,7 @@ public class GankBean {
 
     /**
      * who : mthli
-         * publishedAt : 2016-01-18T04:58:00.925Z
+     * publishedAt : 2016-01-18T04:58:00.925Z
      * desc : 动态生成三角形背景的库
      * type : Android
      * url : https://github.com/manolovn/trianglify
@@ -24,8 +26,8 @@ public class GankBean {
     private String url;
     private boolean used;
     private String objectId;
-    private String createdAt;
-    private String updatedAt;
+    private Date createdAt;
+    private Date updatedAt;
 
     public void setWho(String who) {
         this.who = who;
@@ -55,11 +57,19 @@ public class GankBean {
         this.objectId = objectId;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public void setUpdatedAt(String updatedAt) {
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -91,13 +101,6 @@ public class GankBean {
         return objectId;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
 
     @Override
     public String toString() {

@@ -1,7 +1,7 @@
-package com.blanke.simplegank.core.main.dagger;
+package com.blanke.simplegank.core.category.dagger;
 
 import com.blanke.simplegank.app.AppComponent;
-import com.blanke.simplegank.core.main.CateGoryFragment;
+import com.blanke.simplegank.core.category.CateGoryFragment;
 
 import dagger.Component;
 

@@ -1,4 +1,4 @@
-package com.blanke.simplegank.core.main.model;
+package com.blanke.simplegank.core.category.model;
 
 import com.blanke.simplegank.bean.CateGoryBean;
 import com.blanke.simplegank.core.retrofit.GankApi;

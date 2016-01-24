@@ -1,8 +1,8 @@
-package com.blanke.simplegank.core.main.presenter;
+package com.blanke.simplegank.core.category.presenter;
 
 import com.blanke.simplegank.bean.CateGoryBean;
 import com.blanke.simplegank.bean.GankBean;
-import com.blanke.simplegank.core.main.model.CateGoryModel;
+import com.blanke.simplegank.core.category.model.CateGoryModel;
 import com.socks.library.KLog;
 
 import java.util.List;

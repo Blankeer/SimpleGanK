@@ -1,18 +1,14 @@
-package com.blanke.simplegank.core.main;
+package com.blanke.simplegank.core.category;
 
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
 import com.blanke.simplegank.R;
@@ -20,10 +16,11 @@ import com.blanke.simplegank.app.BaseApplication;
 import com.blanke.simplegank.base.BaseMvpLceFragment;
 import com.blanke.simplegank.bean.CateGoryBean;
 import com.blanke.simplegank.bean.GankBean;
-import com.blanke.simplegank.core.main.dagger.CateGoryMVPModule;
-import com.blanke.simplegank.core.main.dagger.DaggerCateGoryComponent;
-import com.blanke.simplegank.core.main.presenter.CateGoryPresenter;
-import com.blanke.simplegank.core.main.view.CateGoryView;
+import com.blanke.simplegank.core.category.dagger.CateGoryMVPModule;
+import com.blanke.simplegank.core.category.dagger.DaggerCateGoryComponent;
+import com.blanke.simplegank.core.category.presenter.CateGoryPresenter;
+import com.blanke.simplegank.core.category.view.CateGoryView;
+import com.blanke.simplegank.utils.DateUtils;
 import com.blanke.simplegank.view.CustomSmoothProgressBar;
 import com.socks.library.KLog;
 
@@ -36,7 +33,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.iwgang.familiarrecyclerview.FamiliarRecyclerView;
 import cn.iwgang.familiarrecyclerview.FamiliarRecyclerViewOnScrollListener;
-import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
 
 import static android.view.ViewGroup.LayoutParams;
 
@@ -84,9 +80,10 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
         super.onViewCreated(view, savedInstanceState);
         mRecyclerview.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        mRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new RecyclerAdapter();
         mRecyclerview.setAdapter(mAdapter);
         footLoadView = (CustomSmoothProgressBar) LayoutInflater.from(getActivity()).inflate(R.layout.view_loading_smooth, null);
@@ -98,30 +95,11 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
             @Override
             public void animStop() {
                 KLog.d("上拉动画完成，上拉加载完成");
+                addDataAsyn();//动画完成回调
                 isFootLoading = false;//停止
-                mAdapter.notifyDataSetChanged();
-//                mRecyclerview.smoothScrollToPosition(mAdapter.getItemCount());
-//                jumpBottom();
-            }
-
-            @Override
-            public void onStop() {
-                super.onStop();
-                KLog.d();
             }
         });
-//        footLoadView.setSmoothProgressDrawableCallbacks(new SmoothProgressDrawable.Callbacks() {
-//            @Override
-//            public void onStop() {
-//                KLog.d(footLoadView.isFinishing());
-//                isFootLoading=false;
-//            }
-//
-//            @Override
-//            public void onStart() {
-//                KLog.d(footLoadView.isFinishing());
-//            }
-//        });
+
 
         mRecyclerview.addFooterView(footLoadView);
         mRecyclerview.addOnScrollListener(new FamiliarRecyclerViewOnScrollListener(mRecyclerview.getLayoutManager()) {
@@ -149,6 +127,7 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
+
         final float[] downRawY = {0};
 
 //        mRecyclerview.setOnTouchListener(new OnTouchListener() {
@@ -173,9 +152,7 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
 //            }
 //        });
 
-        KLog.d();
         loadData(false);
-
     }
 
     @Override
@@ -191,12 +168,24 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         jumpToPosition(mAdapter.getItemCount());
     }
 
+    /**
+     * 跳转到列表指定位置
+     *
+     * @param position
+     */
     private void jumpToPosition(int position) {
-        ValueAnimator animator = ValueAnimator.ofInt(mRecyclerview.getFirstVisiblePosition(), position);
-        animator.setDuration(1000);
-        animator.setInterpolator(new DecelerateInterpolator());
-        animator.addUpdateListener(animation -> mRecyclerview.smoothScrollToPosition((int) animation.getAnimatedValue()));
-        animator.start();
+//        ValueAnimator animator = ValueAnimator.ofInt(mRecyclerview.getFirstVisiblePosition(), position);
+//        animator.setDuration(1000);
+//        animator.setInterpolator(new DecelerateInterpolator());
+//        animator.addUpdateListener(animation -> mRecyclerview.smoothScrollToPosition((int) animation.getAnimatedValue()));
+//        animator.start();
+        mRecyclerview.post(() -> mRecyclerview.smoothScrollToPosition(position));
+    }
+
+    private void jumpToShowPosition() {
+        if (mRecyclerview != null && mRecyclerview.isShown()) {
+            jumpToPosition(mRecyclerview.getLastVisiblePosition() + mRecyclerview.getChildCount() - 4);
+        }
     }
 //    @Override
 //    public List<GankBean> getData() {
@@ -213,15 +202,29 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         return mCateGoryPresenter;
     }
 
+    List<GankBean> newData;
 
     @Override
     public void setData(List<GankBean> data) {
-        page++;//请求成功
-        if (isFootLoading) {//上拉
-            mAdapter.addData(data);
-        } else {//下拉
-            mAdapter.setData(data);
-            mAdapter.notifyDataSetChanged();
+        this.newData = data;
+        page++;
+        if (!isFootLoading) {//下拉，直接覆盖数据
+            mAdapter.setData(newData);
+//            mAdapter.notifyDataSetChanged();
+            mAdapter.notifyItemRangeChanged(0, newData.size());
+        }
+    }
+
+    /**
+     * 上拉刷新的回调，需要等待动画完成后回调插入数据
+     */
+    public void addDataAsyn() {
+        if (newData != null) {
+            int oldLastPosition = mAdapter.getItemCount();
+            mAdapter.addData(newData);
+//            mAdapter.notifyDataSetChanged();
+            mAdapter.notifyItemRangeInserted(oldLastPosition, newData.size());
+            jumpToShowPosition();
         }
     }
 
@@ -242,7 +245,7 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
     public void stopRefreshing() {
         KLog.d("刷新结束");
         mSwipeRefreshLayout.setRefreshing(false);
-        footLoadView.postDelayed(() -> footLoadView.setShow(false), 10000);//延迟，防止刷新时间过短
+        footLoadView.postDelayed(() -> footLoadView.setShow(false), 1000);//延迟，防止刷新时间过短
     }
 
     @Override
@@ -276,7 +279,7 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
             GankBean bean = data.get(position);
             holder.mTextViewTitle.setText(bean.getDesc());
             holder.mTextViewTag.setText(bean.getType());
-            holder.mTextViewTime.setText(bean.getUpdatedAt());
+            holder.mTextViewTime.setText(DateUtils.getTimestampString(bean.getUpdatedAt()));
         }
 
         @Override

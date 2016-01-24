@@ -4,9 +4,6 @@ import android.test.InstrumentationTestCase;
 
 import com.blanke.simplegank.test.TestLoadViewActivity;
 import com.blanke.simplegank.view.CustomSmoothProgressBar;
-import com.socks.library.KLog;
-
-import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
 
 /**
  * Created by Blanke on 16-1-22.
@@ -15,7 +12,7 @@ public class LoadViewTest extends InstrumentationTestCase {
 
 
     private TestLoadViewActivity testLoadViewActivity;
-    private long time = 7 * 1000;
+    private long time = 70 * 1000;
     private CustomSmoothProgressBar loadView;
 
     @Override
@@ -36,24 +33,24 @@ public class LoadViewTest extends InstrumentationTestCase {
 //                KLog.d();
 //            }
 //        });
-        loadView.setSmoothProgressDrawableCallbacks(new SmoothProgressDrawable.Callbacks() {
-            @Override
-            public void onStop() {
-                KLog.d();
-            }
-
-            @Override
-            public void onStart() {
-                KLog.d();
-            }
-        });
-        getInstrumentation().runOnMainSync(() -> loadView.setShow(true));
-
-
-        Thread.sleep(10000);
-        getInstrumentation().runOnMainSync(() -> loadView.setShow(false));
-        Thread.sleep(5000);
-        getInstrumentation().runOnMainSync(() -> loadView.setShow(true));
+//        loadView.setSmoothProgressDrawableCallbacks(new SmoothProgressDrawable.Callbacks() {
+//            @Override
+//            public void onStop() {
+//                KLog.d();
+//            }
+//
+//            @Override
+//            public void onStart() {
+//                KLog.d();
+//            }
+//        });
+//        getInstrumentation().runOnMainSync(() -> loadView.setShow(true));
+//
+//
+//        Thread.sleep(10000);
+//        getInstrumentation().runOnMainSync(() -> loadView.setShow(false));
+//        Thread.sleep(5000);
+//        getInstrumentation().runOnMainSync(() -> loadView.setShow(true));
 
 //        loadView.progressiveStop();
 //        progressDrawable.stop();

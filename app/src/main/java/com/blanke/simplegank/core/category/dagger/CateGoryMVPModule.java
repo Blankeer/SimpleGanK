@@ -1,9 +1,9 @@
-package com.blanke.simplegank.core.main.dagger;
+package com.blanke.simplegank.core.category.dagger;
 
-import com.blanke.simplegank.core.main.model.CateGoryModel;
-import com.blanke.simplegank.core.main.model.CateGoryModelImpl;
-import com.blanke.simplegank.core.main.presenter.CateGoryPresenter;
-import com.blanke.simplegank.core.main.presenter.CateGoryPresenterImpl;
+import com.blanke.simplegank.core.category.model.CateGoryModel;
+import com.blanke.simplegank.core.category.model.CateGoryModelImpl;
+import com.blanke.simplegank.core.category.presenter.CateGoryPresenter;
+import com.blanke.simplegank.core.category.presenter.CateGoryPresenterImpl;
 import com.blanke.simplegank.core.retrofit.GankApi;
 
 import dagger.Module;

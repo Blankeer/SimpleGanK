@@ -1,4 +1,4 @@
-package com.blanke.simplegank.core.main.view;
+package com.blanke.simplegank.core.category.view;
 
 import com.blanke.simplegank.bean.GankBean;
 import com.hannesdorfmann.mosby.mvp.lce.MvpLceView;
