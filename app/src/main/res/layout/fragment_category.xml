@@ -10,10 +10,12 @@
         android:layout_height="match_parent">
 
         <cn.iwgang.familiarrecyclerview.FamiliarRecyclerView
+            android:layout_marginTop="3dp"
             android:id="@+id/fragment_cate_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:frv_dividerHeight="7dp"
+            app:frv_itemViewBothSidesMargin="4dp"
             app:frv_layoutManager="staggeredGrid"
             app:frv_layoutManagerOrientation="vertical"
             app:frv_spanCount="2"

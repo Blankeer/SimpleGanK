@@ -42,7 +42,7 @@ public class StaticData {
         for (CateGoryBean item : list) {
             item.setType(ResUtils.getResStringByName(context, item.getType()));//读取type
 //            item.setIconResId(ResUtils.getResDrawableIdByName(context, item.getIconName()));
-            item.setLayoutResId(R.layout.item_cate_recycler);
+            item.setLayoutResId(R.layout.item_category_text_recycler);
             cateGoryBeens.add(item);
         }
         KLog.d("获取到配置信息," + cateGoryBeens);

@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blanke.simplegank.R;
@@ -264,7 +265,7 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
     }
 
 
-    class RecyclerAdapter extends RecyclerView.Adapter<ViewHolder> {
+    class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private List<GankBean> data;
         private int layoutId;
 
@@ -282,18 +283,28 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         }
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            layoutId = mCateGoryBean.getLayoutResId();
-            View root = LayoutInflater.from(getActivity()).inflate(layoutId, null);
-            return new ViewHolder(root);
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            if (viewType == 0) {
+                View root = LayoutInflater.from(getActivity()).inflate(R.layout.item_category_text_recycler, null);
+                return new TextViewHolder(root);
+            } else {
+                View root = LayoutInflater.from(getActivity()).inflate(R.layout.item_category_img_recycler, null);
+                return new TextViewHolder(root);
+            }
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             GankBean bean = data.get(position);
-            holder.mTextViewTitle.setText(bean.getDesc());
-            holder.mTextViewTag.setText(bean.getType());
-            holder.mTextViewTime.setText(DateUtils.getTimestampString(bean.getUpdatedAt()));
+            if (holder instanceof TextViewHolder) {
+                TextViewHolder textholder = (TextViewHolder) holder;
+                textholder.mTextViewTitle.setText(bean.getDesc());
+                textholder.mTextViewTag.setText(bean.getType());
+                textholder.mTextViewTime.setText(DateUtils.getTimestampString(bean.getUpdatedAt()));
+            }else{
+                ImgViewHolder imgViewHolder= (ImgViewHolder) holder;
+//                imgViewHolder.mImageView
+            }
         }
 
         @Override
@@ -307,9 +318,15 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
             }
             this.data.addAll(data);
         }
+
+        @Override
+        public int getItemViewType(int position) {
+            GankBean item = data.get(position);
+            return item.isImage() ? 1 : 0;
+        }
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class TextViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.item_cate_card_title)
         TextView mTextViewTitle;
         @Bind(R.id.item_cate_card_tag)
@@ -318,7 +335,17 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         TextView mTextViewTime;
 
 
-        public ViewHolder(View itemView) {
+        public TextViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
+
+    class ImgViewHolder extends RecyclerView.ViewHolder {
+        @Bind(R.id.item_cate_card_img)
+        ImageView mImageView;
+
+        public ImgViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

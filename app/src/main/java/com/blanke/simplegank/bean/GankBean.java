@@ -29,6 +29,8 @@ public class GankBean {
     private Date createdAt;
     private Date updatedAt;
 
+    private boolean isImage = false;//是否是图片
+
     public void setWho(String who) {
         this.who = who;
     }
@@ -47,6 +49,17 @@ public class GankBean {
 
     public void setUrl(String url) {
         this.url = url;
+        if (url.endsWith("jpg") || url.endsWith("png") || url.endsWith("gif")) {
+            isImage = true;
+        }
+    }
+
+    public boolean isImage() {
+        return isImage;
+    }
+
+    public void setImage(boolean image) {
+        isImage = image;
     }
 
     public void setUsed(boolean used) {
