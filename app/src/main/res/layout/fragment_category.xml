@@ -13,9 +13,11 @@
             android:id="@+id/fragment_cate_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:frv_dividerHeight="7dp"
             app:frv_layoutManager="staggeredGrid"
             app:frv_layoutManagerOrientation="vertical"
-            app:frv_spanCount="2" />
+            app:frv_spanCount="2"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
 

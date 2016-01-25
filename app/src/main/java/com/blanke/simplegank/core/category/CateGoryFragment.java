@@ -57,6 +57,8 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
 
     private boolean isFootLoading = false;
 
+    private long lastLoadTime = 0;
+
     private int page = 1;
 
     public static CateGoryFragment getInstance(CateGoryBean cateGoryBean) {
@@ -210,8 +212,8 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         page++;
         if (!isFootLoading) {//下拉，直接覆盖数据
             mAdapter.setData(newData);
-//            mAdapter.notifyDataSetChanged();
-            mAdapter.notifyItemRangeChanged(0, newData.size());
+            mAdapter.notifyDataSetChanged();
+//            mAdapter.notifyItemRangeChanged(0, newData.size());
         }
     }
 
@@ -230,6 +232,7 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
 
     @Override
     public void loadData(boolean pullToRefresh) {
+        lastLoadTime = System.currentTimeMillis();
         KLog.d("开始加载数据  是否是手动刷新:" + pullToRefresh);
         mCateGoryPresenter.loadGank(pullToRefresh, mCateGoryBean, PAGE_COUNT, page);
     }
@@ -245,7 +248,13 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
     public void stopRefreshing() {
         KLog.d("刷新结束");
         mSwipeRefreshLayout.setRefreshing(false);
-        footLoadView.postDelayed(() -> footLoadView.setShow(false), 1000);//延迟，防止刷新时间过短
+        if (isFootLoading) {
+            if (System.currentTimeMillis() - lastLoadTime >= 3 * 1000 * 1000) {
+                footLoadView.setShow(false);
+            } else {
+                footLoadView.postDelayed(() -> footLoadView.setShow(false), 3000);//延迟，防止刷新时间过短
+            }
+        }
     }
 
     @Override
@@ -264,7 +273,12 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         }
 
         public void setData(List<GankBean> data) {
-            this.data = data;
+            if (this.data == null) {
+                this.data = new ArrayList<>();
+            } else {
+                this.data.clear();
+            }
+            this.data.addAll(data);
         }
 
         @Override
