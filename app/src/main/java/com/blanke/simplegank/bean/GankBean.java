@@ -49,12 +49,15 @@ public class GankBean {
 
     public void setUrl(String url) {
         this.url = url;
-        if (url.endsWith("jpg") || url.endsWith("png") || url.endsWith("gif")) {
-            isImage = true;
-        }
     }
 
     public boolean isImage() {
+        if (isImage) {
+            return true;
+        }
+        if (url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".gif")) {
+            isImage = true;
+        }
         return isImage;
     }
 

@@ -1,5 +1,6 @@
 package com.blanke.simplegank.core.category;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -23,6 +24,11 @@ import com.blanke.simplegank.core.category.presenter.CateGoryPresenter;
 import com.blanke.simplegank.core.category.view.CateGoryView;
 import com.blanke.simplegank.utils.DateUtils;
 import com.blanke.simplegank.view.CustomSmoothProgressBar;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -61,6 +67,7 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
     private long lastLoadTime = 0;
 
     private int page = 1;
+    private DisplayImageOptions options;
 
     public static CateGoryFragment getInstance(CateGoryBean cateGoryBean) {
         CateGoryFragment fragment = new CateGoryFragment();
@@ -97,9 +104,11 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         footLoadView.setSmoothProgressDrawableCallbacks(footLoadView.new CustomCallBack() {
             @Override
             public void animStop() {
-                KLog.d("上拉动画完成，上拉加载完成");
-                addDataAsyn();//动画完成回调
-                isFootLoading = false;//停止
+                if (isFootLoading == true) {
+                    KLog.d("上拉动画完成，上拉加载完成");
+                    addDataAsyn();//动画完成回调
+                    isFootLoading = false;//停止
+                }
             }
         });
 
@@ -225,8 +234,8 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         if (newData != null) {
             int oldLastPosition = mAdapter.getItemCount();
             mAdapter.addData(newData);
-//            mAdapter.notifyDataSetChanged();
-            mAdapter.notifyItemRangeInserted(oldLastPosition, newData.size());
+            mAdapter.notifyDataSetChanged();
+//            mAdapter.notifyItemRangeInserted(oldLastPosition, newData.size());
             jumpToShowPosition();
         }
     }
@@ -244,6 +253,24 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         loadData(true);
     }
 
+    private DisplayImageOptions getImageOptions() {
+        if (options != null) {
+            return options;
+        }
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.ic_launcher) //设置图片在下载期间显示的图片
+                .showImageForEmptyUri(R.mipmap.ic_launcher)//设置图片Uri为空或是错误的时候显示的图片
+                .showImageOnFail(R.mipmap.ic_launcher)  //设置图片加载/解码过程中错误时候显示的图片
+                .cacheInMemory(true)//设置下载的图片是否缓存在内存中
+                .considerExifParams(true)  //是否考虑JPEG图像EXIF参数（旋转，翻转）
+                .imageScaleType(ImageScaleType.EXACTLY)//设置图片以如何的编码方式显示
+                .bitmapConfig(Bitmap.Config.RGB_565)//设置图片的解码类型//
+                .resetViewBeforeLoading(true)//设置图片在下载前是否重置，复位
+                .displayer(new RoundedBitmapDisplayer(20))//是否设置为圆角，弧度为多少
+                .displayer(new FadeInBitmapDisplayer(1000))//是否图片加载好后渐入的动画时间
+                .build();//构建完成
+        return options;
+    }
 
     @Override
     public void stopRefreshing() {
@@ -289,7 +316,7 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
                 return new TextViewHolder(root);
             } else {
                 View root = LayoutInflater.from(getActivity()).inflate(R.layout.item_category_img_recycler, null);
-                return new TextViewHolder(root);
+                return new ImgViewHolder(root);
             }
         }
 
@@ -301,9 +328,9 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
                 textholder.mTextViewTitle.setText(bean.getDesc());
                 textholder.mTextViewTag.setText(bean.getType());
                 textholder.mTextViewTime.setText(DateUtils.getTimestampString(bean.getUpdatedAt()));
-            }else{
-                ImgViewHolder imgViewHolder= (ImgViewHolder) holder;
-//                imgViewHolder.mImageView
+            } else {
+                ImgViewHolder imgViewHolder = (ImgViewHolder) holder;
+                ImageLoader.getInstance().displayImage(bean.getUrl(), imgViewHolder.mImageView, getImageOptions());
             }
         }
 
