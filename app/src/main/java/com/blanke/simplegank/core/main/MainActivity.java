@@ -1,12 +1,13 @@
 package com.blanke.simplegank.core.main;
 
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.blanke.simplegank.bean.CateGoryBean;
 import com.blanke.simplegank.consts.StaticData;
 import com.blanke.simplegank.core.category.CateGoryFragment;
 import com.jakewharton.scalpel.ScalpelFrameLayout;
+import com.melnykov.fab.FloatingActionButton;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.ArrayList;
@@ -47,6 +49,8 @@ public class MainActivity extends BaseActivity {
 
     private List<CateGoryBean> mCateGoryBeens;//分类
 
+    private int mSelectPostion = -1;
+    private CateGoryFragment mSelectFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +82,15 @@ public class MainActivity extends BaseActivity {
 
 
     private void replaceFragment(int index) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.activity_main_framelayout, CateGoryFragment.getInstance(mCateGoryBeens.get(index)))
-                .commit();
-
+        if (index != mSelectPostion) {
+            mSelectPostion = index;
+            CateGoryBean item = mCateGoryBeens.get(index);
+            toolbar.setTitle(item.getName());
+            mSelectFragment = CateGoryFragment.getInstance(item);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.activity_main_framelayout, mSelectFragment)
+                    .commit();
+        }
     }
 
     private void initNavigationMenu() {
@@ -99,7 +108,7 @@ public class MainActivity extends BaseActivity {
         menu.setGroupCheckable(0, true, true);//single
     }
 
-    //透明状态栏
+    //状态栏
     private void setTranslucentStatus() {
         Window win = getWindow();
         WindowManager.LayoutParams winParams = win.getAttributes();
@@ -108,7 +117,8 @@ public class MainActivity extends BaseActivity {
         win.setAttributes(winParams);
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
         tintManager.setStatusBarTintEnabled(true);
-        tintManager.setStatusBarTintColor(R.color.colorPrimary);
+        tintManager.setStatusBarTintColor(Color.parseColor("#00ff0000"));
+//        tintManager.setStatusBarTintColor(R.color.colorPrimary);
     }
 
     @OnClick(R.id.fab)

@@ -18,8 +18,7 @@
             app:frv_itemViewBothSidesMargin="4dp"
             app:frv_layoutManager="staggeredGrid"
             app:frv_layoutManagerOrientation="vertical"
-            app:frv_spanCount="2"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            app:frv_spanCount="2" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
 

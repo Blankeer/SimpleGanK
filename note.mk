@@ -1,4 +1,4 @@
-android-studio必备插件： adb-wifi,butterknife,gsonformat,selector,
+android-studio必备插件： adb-wifi,butterknife,gsonformat,selector,Android-DPI-Calculator
 
 
 1.FloatingActionButton
