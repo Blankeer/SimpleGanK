@@ -22,7 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".test.TestLoadViewActivity"></activity>
+        <activity android:name=".test.TestLoadViewActivity" />
+        <activity android:name=".core.details.WebDetailsActivity"></activity>
     </application>
 
 </manifest>

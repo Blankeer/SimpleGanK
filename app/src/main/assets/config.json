@@ -2,25 +2,43 @@
   {
     "order": 1,
     "name": "妹纸",
-    "type": "type_meizi",
-    "path": "福利"
+    "path": "福利",
+    "icon": "meizi"
   },
   {
     "order": 2,
-    "name": "随机",
-    "path": "random",
-    "type": "type_random"
+    "name": "All",
+    "path": "all",
+    "icon": "all"
   },
   {
     "order": 3,
-    "name": "All",
-    "type": "type_all",
-    "path": "all"
+    "name": "Android",
+    "path": "Android",
+    "icon": "android"
   },
   {
     "order": 4,
-    "name": "Android",
-    "type": "type_android",
-    "path": "Android"
+    "name": "iOS",
+    "path": "iOS",
+    "icon": "ios"
+  },
+  {
+    "order": 7,
+    "name": "休息视频",
+    "path": "休息视频",
+    "icon": "video"
+  },
+  {
+    "order": 6,
+    "name": "拓展资源",
+    "path": "拓展资源",
+    "icon": "tuozhan"
+  },
+  {
+    "order": 5,
+    "name": "前端",
+    "path": "前端",
+    "icon": "js"
   }
 ]

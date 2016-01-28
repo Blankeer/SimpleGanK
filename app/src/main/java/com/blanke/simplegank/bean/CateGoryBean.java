@@ -13,9 +13,8 @@ public class CateGoryBean implements Comparable<CateGoryBean>, Parcelable {
     private String type;
     private String path;//url
     private int id;
-    private String iconName;//图标资源name
-    private int iconResId;//图标资源id
-    private int layoutResId;//layout布局id
+    private String icon;//图标资源name
+    private int iconResId;
 
     @Override
     public boolean equals(Object o) {
@@ -71,20 +70,13 @@ public class CateGoryBean implements Comparable<CateGoryBean>, Parcelable {
         return name;
     }
 
-    public String getIconName() {
-        return iconName;
+    public String getIcon() {
+        return icon;
     }
 
-    public int getLayoutResId() {
-        return layoutResId;
-    }
 
-    public void setLayoutResId(int layoutResId) {
-        this.layoutResId = layoutResId;
-    }
-
-    public void setIconName(String iconName) {
-        this.iconName = iconName;
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     public void setName(String name) {
@@ -125,9 +117,8 @@ public class CateGoryBean implements Comparable<CateGoryBean>, Parcelable {
         dest.writeString(this.type);
         dest.writeString(this.path);
         dest.writeInt(this.id);
-        dest.writeString(this.iconName);
+        dest.writeString(this.icon);
         dest.writeInt(this.iconResId);
-        dest.writeInt(this.layoutResId);
     }
 
     public CateGoryBean() {
@@ -139,9 +130,8 @@ public class CateGoryBean implements Comparable<CateGoryBean>, Parcelable {
         this.type = in.readString();
         this.path = in.readString();
         this.id = in.readInt();
-        this.iconName = in.readString();
+        this.icon = in.readString();
         this.iconResId = in.readInt();
-        this.layoutResId = in.readInt();
     }
 
     public static final Parcelable.Creator<CateGoryBean> CREATOR = new Parcelable.Creator<CateGoryBean>() {

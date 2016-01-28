@@ -1,11 +1,14 @@
 package com.blanke.simplegank.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
 /**
  * Created by Blanke on 16-1-19.
  */
-public class GankBean {
+public class GankBean implements Parcelable {
 
     /**
      * who : mthli
@@ -132,4 +135,51 @@ public class GankBean {
                 ", updatedAt='" + updatedAt + '\'' +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.who);
+        dest.writeString(this.publishedAt);
+        dest.writeString(this.desc);
+        dest.writeString(this.type);
+        dest.writeString(this.url);
+        dest.writeByte(used ? (byte) 1 : (byte) 0);
+        dest.writeString(this.objectId);
+        dest.writeLong(createdAt != null ? createdAt.getTime() : -1);
+        dest.writeLong(updatedAt != null ? updatedAt.getTime() : -1);
+        dest.writeByte(isImage ? (byte) 1 : (byte) 0);
+    }
+
+    public GankBean() {
+    }
+
+    protected GankBean(Parcel in) {
+        this.who = in.readString();
+        this.publishedAt = in.readString();
+        this.desc = in.readString();
+        this.type = in.readString();
+        this.url = in.readString();
+        this.used = in.readByte() != 0;
+        this.objectId = in.readString();
+        long tmpCreatedAt = in.readLong();
+        this.createdAt = tmpCreatedAt == -1 ? null : new Date(tmpCreatedAt);
+        long tmpUpdatedAt = in.readLong();
+        this.updatedAt = tmpUpdatedAt == -1 ? null : new Date(tmpUpdatedAt);
+        this.isImage = in.readByte() != 0;
+    }
+
+    public static final Parcelable.Creator<GankBean> CREATOR = new Parcelable.Creator<GankBean>() {
+        public GankBean createFromParcel(Parcel source) {
+            return new GankBean(source);
+        }
+
+        public GankBean[] newArray(int size) {
+            return new GankBean[size];
+        }
+    };
 }

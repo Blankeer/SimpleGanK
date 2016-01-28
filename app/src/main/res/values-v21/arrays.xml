@@ -2,12 +2,12 @@
 <resources>
     <integer-array name="loading_colors">
         <item>@color/colorPrimary</item>
+        <item>@color/color_red</item>
         <item>@color/colorAccent</item>
     </integer-array>
     <integer-array name="loading_colors_more">
         <item>@color/colorPrimary</item>
+        <item>@color/color_red</item>
         <item>@color/colorAccent</item>
-        <item>@color/cpb_default_color</item>
-        <item>@android:color/holo_green_dark</item>
     </integer-array>
 </resources>

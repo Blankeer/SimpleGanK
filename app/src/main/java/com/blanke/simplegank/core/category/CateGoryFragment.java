@@ -1,7 +1,9 @@
 package com.blanke.simplegank.core.category;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -22,14 +24,19 @@ import com.blanke.simplegank.core.category.dagger.CateGoryMVPModule;
 import com.blanke.simplegank.core.category.dagger.DaggerCateGoryComponent;
 import com.blanke.simplegank.core.category.presenter.CateGoryPresenter;
 import com.blanke.simplegank.core.category.view.CateGoryView;
+import com.blanke.simplegank.core.details.WebDetailsActivity;
 import com.blanke.simplegank.utils.DateUtils;
 import com.blanke.simplegank.view.CustomSmoothProgressBar;
+import com.melnykov.fab.FloatingActionButton;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.socks.library.KLog;
+
+import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,13 +54,14 @@ import static android.view.ViewGroup.LayoutParams;
  * Created by Blanke on 16-1-19.
  */
 public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, List<GankBean>, CateGoryView, CateGoryPresenter> implements CateGoryView, SwipeRefreshLayout.OnRefreshListener {
-
+    public final static String fab_init = "fab_init";
     private final static String KEY_CATEGORY = "category";
     private static final int PAGE_COUNT = 20;
     @Bind(R.id.fragment_cate_recyclerview)
     FamiliarRecyclerView mRecyclerview;
     @Bind(R.id.contentView)
     SwipeRefreshLayout mSwipeRefreshLayout;
+
 
     private CateGoryBean mCateGoryBean;
     private RecyclerAdapter mAdapter;
@@ -86,6 +94,20 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
                 .appComponent(BaseApplication.getApplication(getActivity()).getAppComponent())
                 .cateGoryMVPModule(new CateGoryMVPModule())
                 .build().inject(this);
+        EventBus.getDefault().registerSticky(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscriber(tag = fab_init)
+    private void initFab(FloatingActionButton fab) {
+//        jumpTop();
+        fab.setOnClickListener(v -> jumpTop());
+        fab.attachToRecyclerView(mRecyclerview);
     }
 
     @Override
@@ -133,8 +155,11 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
             }
         });
         mRecyclerview.setOnItemClickListener((familiarRecyclerView, view1, position) -> {
-            Snackbar.make(view1, mAdapter.getData().get(position).getDesc(), Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+//            Snackbar.make(view1, mAdapter.getData().get(position).getDesc(), Snackbar.LENGTH_LONG)
+//                    .setAction("Action", null).show();
+            Intent intent = new Intent(getActivity(), WebDetailsActivity.class);
+            intent.putExtra(WebDetailsActivity.ARG_NAME, (Parcelable) mAdapter.getData().get(position));
+            startActivity(intent);
         });
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -165,6 +190,9 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
 //        });
 
         loadData(false);
+
+//        mFab.attachToRecyclerView(mRecyclerview);
+//        mFab.setOnClickListener(v->jumpTop());
     }
 
     @Override
@@ -196,7 +224,8 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
 
     private void jumpToShowPosition() {
         if (mRecyclerview != null && mRecyclerview.isShown()) {
-            jumpToPosition(mRecyclerview.getLastVisiblePosition() + mRecyclerview.getChildCount() - 4);
+//            jumpToPosition(mRecyclerview.getLastVisiblePosition() + mRecyclerview.getChildCount() - 4);
+            jumpToPosition(mRecyclerview.getLastVisiblePosition() + 3);
         }
     }
 //    @Override
