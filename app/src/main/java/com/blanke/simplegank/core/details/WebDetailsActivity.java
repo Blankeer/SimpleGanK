@@ -1,13 +1,11 @@
 package com.blanke.simplegank.core.details;
 
 import android.annotation.TargetApi;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
-import android.transition.Fade;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,17 +14,13 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import com.blanke.simplegank.R;
 import com.blanke.simplegank.base.BaseActivity;
 import com.blanke.simplegank.bean.GankBean;
-import com.blanke.simplegank.utils.ResUtils;
 import com.blanke.simplegank.view.CustomSmoothProgressBar;
-import com.socks.library.KLog;
 
 import butterknife.Bind;
-import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
 public class WebDetailsActivity extends BaseActivity {
     public static String ARG_NAME = "WebDetailsActivity";
@@ -102,6 +96,13 @@ public class WebDetailsActivity extends BaseActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mWebView.stopLoading();
+        mWebView.destroy();
     }
 
     @Override
