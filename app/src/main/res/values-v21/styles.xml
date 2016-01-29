@@ -9,5 +9,18 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+
+        <item name="android:windowContentTransitions">true</item>
     </style>
+
+    <style name="CardView.CateGory" parent="CardView">
+        <item name="contentPadding">0dp</item>
+        <item name="android:stateListAnimator">@animator/card_animator</item>
+        <item name="android:foreground">@drawable/foreground_card</item>
+        <item name="cardCornerRadius">@dimen/card_radius</item>
+        <item name="cardPreventCornerOverlap">true</item>
+        <item name="cardElevation">@dimen/card_elevation</item>
+        <item name="cardBackgroundColor">@color/card_background</item>
+    </style>
+
 </resources>

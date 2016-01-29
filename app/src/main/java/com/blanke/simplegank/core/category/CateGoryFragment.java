@@ -1,14 +1,18 @@
 package com.blanke.simplegank.core.category;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Explode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,6 +114,7 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         fab.attachToRecyclerView(mRecyclerview);
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
@@ -157,9 +162,21 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         mRecyclerview.setOnItemClickListener((familiarRecyclerView, view1, position) -> {
 //            Snackbar.make(view1, mAdapter.getData().get(position).getDesc(), Snackbar.LENGTH_LONG)
 //                    .setAction("Action", null).show();
-            Intent intent = new Intent(getActivity(), WebDetailsActivity.class);
-            intent.putExtra(WebDetailsActivity.ARG_NAME, (Parcelable) mAdapter.getData().get(position));
-            startActivity(intent);
+
+            Explode mExplode = new Explode();
+            mExplode.setDuration(500);
+
+            getActivity().getWindow().setExitTransition(mExplode);
+            getActivity().getWindow().setEnterTransition(mExplode);
+
+            ActivityOptionsCompat optionsCompat2 = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity());
+            Intent intent2 = new Intent(getActivity(), WebDetailsActivity.class);
+            intent2.putExtra(WebDetailsActivity.ARG_NAME, mAdapter.getData().get(position));
+            getActivity().startActivity(intent2, optionsCompat2.toBundle());
+
+//            Intent intent = new Intent(getActivity(), WebDetailsActivity.class);
+//            intent.putExtra(WebDetailsActivity.ARG_NAME, mAdapter.getData().get(position));
+//            startActivity(intent);
         });
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
         mSwipeRefreshLayout.setOnRefreshListener(this);

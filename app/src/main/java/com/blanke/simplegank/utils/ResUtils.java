@@ -22,7 +22,12 @@ public class ResUtils {
     public static int getResDrawableIdByName(Context context, String name) {
         return context.getResources().getIdentifier(context.getPackageName() + ":drawable/" + name, null, null);
     }
+
     public static int getResMipmapIdByName(Context context, String name) {
         return context.getResources().getIdentifier(context.getPackageName() + ":mipmap/" + name, null, null);
+    }
+
+    public static int getColorById(Context context, int id) {
+        return context.getResources().getColor(id);
     }
 }
