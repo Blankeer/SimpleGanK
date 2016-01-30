@@ -1,6 +1,7 @@
 package com.blanke.simplegank.core.details;
 
 import android.annotation.TargetApi;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -31,7 +32,7 @@ public class WebDetailsActivity extends BaseActivity {
     WebView mWebView;
     @Bind(R.id.loadingSmoothView)
     CustomSmoothProgressBar mSmoothProgressBar;
-//    @Bind(R.id.collapsing_toolbar_layout)
+    //    @Bind(R.id.collapsing_toolbar_layout)
     CollapsingToolbarLayout mCollapsingToolbarLayout;
     private GankBean mGankBean;
 
@@ -59,7 +60,7 @@ public class WebDetailsActivity extends BaseActivity {
 //
 //        mCollapsingToolbarLayout.setTitle(mGankBean.getDesc());
 
-        mSmoothProgressBar.setShow(true);
+//        mSmoothProgressBar.setShow(true);
         mWebView.loadUrl(mGankBean.getUrl());
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setUseWideViewPort(true);
@@ -75,10 +76,17 @@ public class WebDetailsActivity extends BaseActivity {
             }
 
             @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                if (mSmoothProgressBar != null) {
+                    mSmoothProgressBar.setShow(true);
+                }
+            }
+
+            @Override
             public void onPageFinished(WebView view, String url) {
                 if (mSmoothProgressBar != null) {
                     mSmoothProgressBar.setShow(false);
-                    mSmoothProgressBar.setVisibility(View.GONE);
                 }
             }
 
