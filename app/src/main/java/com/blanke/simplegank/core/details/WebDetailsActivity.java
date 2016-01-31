@@ -1,7 +1,6 @@
 package com.blanke.simplegank.core.details;
 
 import android.annotation.TargetApi;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -9,12 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
 import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.view.View;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import com.blanke.simplegank.R;
 import com.blanke.simplegank.base.BaseActivity;
@@ -28,9 +22,9 @@ public class WebDetailsActivity extends BaseActivity {
 
     @Bind(R.id.toolbar2)
     Toolbar toolbar;
-    @Bind(R.id.activity_web_webview)
+    //    @Bind(R.id.activity_web_webview)
     WebView mWebView;
-    @Bind(R.id.loadingSmoothView)
+    //    @Bind(R.id.loadingSmoothView)
     CustomSmoothProgressBar mSmoothProgressBar;
     //    @Bind(R.id.collapsing_toolbar_layout)
     CollapsingToolbarLayout mCollapsingToolbarLayout;
@@ -54,47 +48,33 @@ public class WebDetailsActivity extends BaseActivity {
 
         mGankBean = getIntent().getParcelableExtra(ARG_NAME);
 
-//        mCollapsingToolbarLayout.setTitle("CollapsingToolbarLayout");
 //        mCollapsingToolbarLayout.setExpandedTitleColor(ResUtils.getColorById(this, R.color.colorPrimary));
 //        mCollapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
 //
 //        mCollapsingToolbarLayout.setTitle(mGankBean.getDesc());
-
+        return;
 //        mSmoothProgressBar.setShow(true);
-        mWebView.loadUrl(mGankBean.getUrl());
-        WebSettings webSettings = mWebView.getSettings();
-        webSettings.setUseWideViewPort(true);
-        webSettings.setLoadWithOverviewMode(true);
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setBuiltInZoomControls(true);
-        webSettings.setSupportZoom(true);
-        mWebView.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
-                return true;
-            }
-
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-                if (mSmoothProgressBar != null) {
-                    mSmoothProgressBar.setShow(true);
-                }
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                if (mSmoothProgressBar != null) {
-                    mSmoothProgressBar.setShow(false);
-                }
-            }
-
-            @Override
-            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                super.onReceivedError(view, request, error);
-            }
-        });
+//        mWebView.loadUrl(mGankBean.getUrl());
+//        WebSettings webSettings = mWebView.getSettings();
+//        webSettings.setUseWideViewPort(true);
+//        webSettings.setLoadWithOverviewMode(true);
+//        webSettings.setJavaScriptEnabled(true);
+//        webSettings.setBuiltInZoomControls(true);
+//        webSettings.setSupportZoom(true);
+//        mWebView.setWebViewClient(new WebViewClient() {
+//            @Override
+//            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//                view.loadUrl(url);
+//                return true;
+//            }
+//
+//            @Override
+//            public void onPageFinished(WebView view, String url) {
+//                if (mSmoothProgressBar != null) {
+//                    mSmoothProgressBar.setShow(false);
+//                }
+//            }
+//        });
     }
 
     @Override

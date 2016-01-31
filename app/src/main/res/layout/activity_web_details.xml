@@ -20,23 +20,19 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="match_parent">
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:layout_height="match_parent">
 
-            <include
-                android:id="@+id/loadingSmoothView"
-                layout="@layout/view_loading_smooth" />
-
-            <WebView
-                android:id="@+id/activity_web_webview"
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"></WebView>
-        </FrameLayout>
+                android:layout_height="800dp"
+                android:background="#44ff0000"
+                android:text="test"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        </LinearLayout>
+
     </ScrollView>
 </android.support.design.widget.CoordinatorLayout>
