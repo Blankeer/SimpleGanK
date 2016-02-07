@@ -13,6 +13,6 @@
         android:layout_gravity="center"
         android:layout_marginBottom="40dp"
         android:layout_marginTop="40dp"
-        android:src="@drawable/svg" />
+        android:src="@mipmap/gank" />
 
 </LinearLayout>

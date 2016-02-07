@@ -1,18 +1,15 @@
 package com.blanke.simplegank.core.category;
 
-import android.annotation.TargetApi;
-import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
-import android.transition.Explode;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +25,9 @@ import com.blanke.simplegank.core.category.dagger.CateGoryMVPModule;
 import com.blanke.simplegank.core.category.dagger.DaggerCateGoryComponent;
 import com.blanke.simplegank.core.category.presenter.CateGoryPresenter;
 import com.blanke.simplegank.core.category.view.CateGoryView;
+import com.blanke.simplegank.core.details.ImgDetailsActivity;
 import com.blanke.simplegank.core.details.WebDetailsActivity;
+import com.blanke.simplegank.utils.AppConfigUtils;
 import com.blanke.simplegank.utils.DateUtils;
 import com.blanke.simplegank.view.CustomSmoothProgressBar;
 import com.melnykov.fab.FloatingActionButton;
@@ -65,7 +64,7 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
     FamiliarRecyclerView mRecyclerview;
     @Bind(R.id.contentView)
     SwipeRefreshLayout mSwipeRefreshLayout;
-
+    private int itemWidthDp = 200;
 
     private CateGoryBean mCateGoryBean;
     private RecyclerAdapter mAdapter;
@@ -91,7 +90,6 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        KLog.d();
         super.onCreate(savedInstanceState);
         mCateGoryBean = getArguments().getParcelable(KEY_CATEGORY);
         DaggerCateGoryComponent.builder()
@@ -114,11 +112,19 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         fab.attachToRecyclerView(mRecyclerview);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        int screenWidth = newConfig.screenWidthDp;
+        mRecyclerview.setLayoutManager(new StaggeredGridLayoutManager(screenWidth / itemWidthDp + 1, OrientationHelper.VERTICAL));
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-
         super.onViewCreated(view, savedInstanceState);
+        int screenWidth = AppConfigUtils.getScreenWidthDp(getActivity());
+        mRecyclerview.setLayoutManager(new StaggeredGridLayoutManager(screenWidth / itemWidthDp + 1, OrientationHelper.VERTICAL));
+
         mRecyclerview.setItemAnimator(new DefaultItemAnimator());
 //        mRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new RecyclerAdapter();
@@ -160,23 +166,13 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
             }
         });
         mRecyclerview.setOnItemClickListener((familiarRecyclerView, view1, position) -> {
-//            Snackbar.make(view1, mAdapter.getData().get(position).getDesc(), Snackbar.LENGTH_LONG)
-//                    .setAction("Action", null).show();
-
-            Explode mExplode = new Explode();
-            mExplode.setDuration(500);
-
-            getActivity().getWindow().setExitTransition(mExplode);
-            getActivity().getWindow().setEnterTransition(mExplode);
-
-            ActivityOptionsCompat optionsCompat2 = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity());
-            Intent intent2 = new Intent(getActivity(), WebDetailsActivity.class);
-            intent2.putExtra(WebDetailsActivity.ARG_NAME, mAdapter.getData().get(position));
-            getActivity().startActivity(intent2, optionsCompat2.toBundle());
-
-//            Intent intent = new Intent(getActivity(), WebDetailsActivity.class);
-//            intent.putExtra(WebDetailsActivity.ARG_NAME, mAdapter.getData().get(position));
-//            startActivity(intent);
+            GankBean bean = mAdapter.getData().get(position);
+            if (bean.isImage()) {
+                ImageView imageView = (ImageView) view1.findViewById(R.id.item_cate_card_img);
+                ImgDetailsActivity.start(getActivity(), imageView, bean);
+            } else {
+                WebDetailsActivity.start(getActivity(), bean);
+            }
         });
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -304,12 +300,13 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
             return options;
         }
         options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.ic_launcher) //设置图片在下载期间显示的图片
-                .showImageForEmptyUri(R.mipmap.ic_launcher)//设置图片Uri为空或是错误的时候显示的图片
-                .showImageOnFail(R.mipmap.ic_launcher)  //设置图片加载/解码过程中错误时候显示的图片
+                .showImageOnLoading(R.drawable.load) //设置图片在下载期间显示的图片
+                .showImageForEmptyUri(R.drawable.load)//设置图片Uri为空或是错误的时候显示的图片
+                .showImageOnFail(R.drawable.load)  //设置图片加载/解码过程中错误时候显示的图片
                 .cacheInMemory(true)//设置下载的图片是否缓存在内存中
+                .cacheOnDisk(true)
                 .considerExifParams(true)  //是否考虑JPEG图像EXIF参数（旋转，翻转）
-                .imageScaleType(ImageScaleType.EXACTLY)//设置图片以如何的编码方式显示
+                .imageScaleType(ImageScaleType.EXACTLY_STRETCHED)//设置图片以如何的编码方式显示
                 .bitmapConfig(Bitmap.Config.RGB_565)//设置图片的解码类型//
                 .resetViewBeforeLoading(true)//设置图片在下载前是否重置，复位
                 .displayer(new RoundedBitmapDisplayer(20))//是否设置为圆角，弧度为多少

@@ -1,7 +1,6 @@
 package com.blanke.simplegank.core.main;
 
 import android.annotation.TargetApi;
-import android.graphics.Color;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,7 +33,7 @@ import java.util.List;
 import butterknife.Bind;
 
 public class MainActivity extends BaseActivity {
-
+    private String KEY_SAVESTATUS = "main_savestatus";
     @Bind(R.id.activity_main_testlayout)
     ScalpelFrameLayout mTestLayout;
 
@@ -62,8 +61,6 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -112,14 +109,16 @@ public class MainActivity extends BaseActivity {
         initNavigationMenu();
 
         replaceFragment(0);
-        activityMainNavigation.post(() -> {
-            mSvg = (ImageView) activityMainNavigation.findViewById(R.id.head_svg);
-            mAnimatedVectorDrawable = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.svg_an);
-            if (mAnimatedVectorDrawable != null) {
-                mSvg.setImageDrawable(mAnimatedVectorDrawable);
-            }
-        });
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            activityMainNavigation.post(() -> {
+                mSvg = (ImageView) activityMainNavigation.findViewById(R.id.head_svg);
+                mAnimatedVectorDrawable = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.svg_an);
+                if (mAnimatedVectorDrawable != null) {
+                    mSvg.setImageDrawable(mAnimatedVectorDrawable);
+                }
+            });
+        }
 
     }
 
@@ -164,7 +163,6 @@ public class MainActivity extends BaseActivity {
         tintManager.setStatusBarTintEnabled(true);
         tintManager.setStatusBarTintColor(R.color.colorPrimary);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -3,6 +3,7 @@
     <color name="colorPrimary">@color/accent_material_light</color>
     <color name="colorPrimaryDark">@color/colorPrimary</color>
     <color name="colorAccent">#559688</color>
+    <color name="colorAccent2">#44559688</color>
     <color name="card_background">#2fff</color>
     <color name="card_click">@color/colorPrimary</color>
     <color name="svg_color">#fff</color>

@@ -3,6 +3,8 @@ package com.blanke.simplegank.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.socks.library.KLog;
+
 import java.util.Date;
 
 /**
@@ -110,6 +112,12 @@ public class GankBean implements Parcelable {
 
     public String getUrl() {
         return url;
+    }
+
+    public String getUrlName() {
+        String[] temp = url.split("/");
+        KLog.d(temp[temp.length - 1]);
+        return temp[temp.length - 1];
     }
 
     public boolean isUsed() {

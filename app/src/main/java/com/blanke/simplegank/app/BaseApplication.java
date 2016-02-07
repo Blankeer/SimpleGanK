@@ -4,14 +4,9 @@ import android.app.Application;
 import android.content.Context;
 
 import com.blanke.simplegank.consts.StaticData;
-import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
-import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
-import com.socks.library.KLog;
 
 import java.io.IOException;
 
@@ -42,8 +37,7 @@ public class BaseApplication extends Application {
     private void initImageLoader() {
         ImageLoaderConfiguration config = new ImageLoaderConfiguration
                 .Builder(this)
-                .memoryCacheExtraOptions(600, 600)
-                .defaultDisplayImageOptions(DisplayImageOptions.createSimple())
+                .memoryCacheExtraOptions(600, 800)
                 .imageDownloader(new BaseImageDownloader(this, 5 * 1000, 10 * 1000))
                 .writeDebugLogs()
                 .build();

@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.blanke.simplegank">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".app.BaseApplication"
-        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".core.main.MainActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|navigation|screenSize"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -24,7 +25,8 @@
         </activity>
         <activity android:name=".test.TestLoadViewActivity" />
         <activity android:name=".core.details.WebDetailsActivity" />
-        <activity android:name=".test.TestToolbarActivity"></activity>
+        <activity android:name=".test.TestToolbarActivity" />
+        <activity android:name=".core.details.ImgDetailsActivity"></activity>
     </application>
 
 </manifest>

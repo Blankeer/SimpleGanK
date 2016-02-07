@@ -35,10 +35,13 @@ public class CateGoryBean implements Comparable<CateGoryBean>, Parcelable {
     @Override
     public String toString() {
         return "CateGoryBean{" +
-                "id=" + id +
+                "icon='" + icon + '\'' +
                 ", order=" + order +
                 ", name='" + name + '\'' +
                 ", type='" + type + '\'' +
+                ", path='" + path + '\'' +
+                ", id=" + id +
+                ", iconResId=" + iconResId +
                 '}';
     }
 
