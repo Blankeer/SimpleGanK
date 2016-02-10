@@ -6,7 +6,7 @@
     android:background="@color/colorAccent"
     tools:context="com.blanke.simplegank.core.details.ImgDetailsActivity">
 
-    <com.bm.library.PhotoView
+    <ImageView
         android:id="@+id/activity_img_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

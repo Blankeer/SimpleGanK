@@ -126,7 +126,6 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         mRecyclerview.setLayoutManager(new StaggeredGridLayoutManager(screenWidth / itemWidthDp + 1, OrientationHelper.VERTICAL));
 
         mRecyclerview.setItemAnimator(new DefaultItemAnimator());
-//        mRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new RecyclerAdapter();
         mRecyclerview.setAdapter(mAdapter);
         footLoadView = (CustomSmoothProgressBar) LayoutInflater.from(getActivity()).inflate(R.layout.view_loading_smooth, null);

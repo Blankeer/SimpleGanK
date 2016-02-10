@@ -18,7 +18,6 @@ import com.blanke.simplegank.R;
 import com.blanke.simplegank.base.BaseActivity;
 import com.blanke.simplegank.bean.GankBean;
 import com.blanke.simplegank.view.CustomSmoothProgressBar;
-import com.socks.library.KLog;
 
 import butterknife.Bind;
 
@@ -80,7 +79,7 @@ public class WebDetailsActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 if (mSmoothProgressBar != null) {
-                    mSmoothProgressBar.setShow(false);
+                    mSmoothProgressBar.postDelayed(() -> mSmoothProgressBar.setShow(false), 1000);
                 }
             }
         });
@@ -88,7 +87,6 @@ public class WebDetailsActivity extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        KLog.d();
         if ((keyCode == KeyEvent.KEYCODE_BACK) && mWebView.canGoBack()) {
             mWebView.goBack();
             return true;

@@ -110,7 +110,7 @@ public class MainActivity extends BaseActivity {
 
         replaceFragment(0);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//svg动画
             activityMainNavigation.post(() -> {
                 mSvg = (ImageView) activityMainNavigation.findViewById(R.id.head_svg);
                 mAnimatedVectorDrawable = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.svg_an);

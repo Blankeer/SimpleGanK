@@ -66,3 +66,7 @@ https://github.com/JakeWharton/scalpel
 
 21.内存泄露检测工具
 http://p.codekk.com/detail/Android/square/leakcanary
+
+22 photoview
+    compile 'com.commit451:PhotoView:1.2.4'
+    https://github.com/chrisbanes/PhotoView
