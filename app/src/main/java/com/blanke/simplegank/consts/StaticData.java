@@ -24,7 +24,8 @@ public class StaticData {
     public static final String GANK_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
     private static TreeSet<CateGoryBean> cateGoryBeens = null;
     private static String preIconName = "icon_";
-
+    public static final int PAGE_COUNT=20;
+    public static final int ITEM_WIDTH_DP=200;
     /**
      * 从config.json中读取分类配置
      *

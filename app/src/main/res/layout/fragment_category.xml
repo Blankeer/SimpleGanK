@@ -4,11 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <com.cjj.MaterialRefreshLayout
         android:id="@+id/contentView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="5dp"
+        app:isLoadMore="true"
+        app:overlay="true"
+        app:progress_colors="@array/loading_colors"
+        app:wave_color="@color/colorAccent2"
+        app:wave_height_type="higher"
+        app:wave_show="true">
 
         <cn.iwgang.familiarrecyclerview.FamiliarRecyclerView
             android:id="@+id/fragment_cate_recyclerview"
@@ -19,7 +25,7 @@
             app:frv_layoutManager="staggeredGrid"
             app:frv_layoutManagerOrientation="vertical"
             app:frv_spanCount="2" />
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </com.cjj.MaterialRefreshLayout>
 
 
     <include layout="@layout/view_loading" />

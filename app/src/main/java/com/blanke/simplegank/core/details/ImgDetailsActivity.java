@@ -13,6 +13,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
@@ -60,6 +61,10 @@ public class ImgDetailsActivity extends BaseActivity {
     public void initImageData(Bitmap bitmap) {
         this.mBitmap = bitmap;
         mImageView.setImageBitmap(mBitmap);
+        ViewGroup.LayoutParams params = mImageView.getLayoutParams();
+        params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        mImageView.setLayoutParams(params);
     }
 
     @Override
@@ -70,6 +75,7 @@ public class ImgDetailsActivity extends BaseActivity {
         setContentView(R.layout.activity_img_details);
         Bundle bundle = getIntent().getExtras();
         mGankBean = bundle.getParcelable(ARG_NAME_BEAN);
+
         PhotoViewAttacher mAttacher = new PhotoViewAttacher(mImageView);
         mAttacher.setOnLongClickListener(v -> {
             new MsgDialog(ResUtils.getResString(ImgDetailsActivity.this, R.string.msg_down_img))
@@ -91,8 +97,10 @@ public class ImgDetailsActivity extends BaseActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage(title);
             builder.setPositiveButton("确定", (dialog, id) -> {
-                boolean f = BitmapUtils.savaImage(ImgDetailsActivity.this, mBitmap, mGankBean.getUrlName());
-                Snackbar.make(mImageView, f ? R.string.msg_down_img_ok : R.string.msg_down_img_error, Snackbar.LENGTH_SHORT).show();
+                BitmapUtils.savaImage(ImgDetailsActivity.this, mBitmap, mGankBean.getUrlName())
+                        .subscribe(aBoolean ->
+                                Snackbar.make(mImageView, aBoolean ? R.string.msg_down_img_ok : R.string.msg_down_img_error, Snackbar.LENGTH_SHORT)
+                                        .show());
                 dialog.dismiss();
             });
             builder.setNegativeButton("取消", (dialog, id) -> {

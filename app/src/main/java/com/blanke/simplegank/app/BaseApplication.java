@@ -39,7 +39,7 @@ public class BaseApplication extends Application {
                 .Builder(this)
                 .memoryCacheExtraOptions(600, 800)
                 .imageDownloader(new BaseImageDownloader(this, 5 * 1000, 10 * 1000))
-                .writeDebugLogs()
+//                .writeDebugLogs()
                 .build();
         ImageLoader.getInstance().init(config);
     }

@@ -31,19 +31,12 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
     compile 'com.jakewharton:butterknife:7.0.1'
-    //butterknife
     compile 'com.hannesdorfmann.mosby:mvp:2.0.0'
-    //mosby mvp
     compile 'com.hannesdorfmann.mosby:viewstate:2.0.0'
-    //mvp state
     compile 'com.github.castorflex.smoothprogressbar:library-circular:1.2.0'
-    //circual loadview
     compile 'com.github.zhaokaiqiang.klog:library:1.3.0'
-    //log
     compile 'com.google.dagger:dagger:2.0.2'
-    //dagger2
     apt 'com.google.dagger:dagger-compiler:2.0.2'
-    //dagger2 apt
     provided 'org.glassfish:javax.annotation:10.0-b28'
     compile 'com.squareup.retrofit2:retrofit:2.0.0-beta3'
     compile 'com.squareup.retrofit2:retrofit-converters:2.0.0-beta3'
@@ -58,4 +51,5 @@ dependencies {
     compile 'com.melnykov:floatingactionbutton:1.3.0'
     compile 'org.simple:androideventbus:1.0.5.1'
     compile 'com.commit451:PhotoView:1.2.4'
+    compile 'com.cjj.materialrefeshlayout:library:1.3.0'
 }

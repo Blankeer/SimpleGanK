@@ -21,6 +21,7 @@ import com.blanke.simplegank.app.BaseApplication;
 import com.blanke.simplegank.base.BaseMvpLceFragment;
 import com.blanke.simplegank.bean.CateGoryBean;
 import com.blanke.simplegank.bean.GankBean;
+import com.blanke.simplegank.consts.StaticData;
 import com.blanke.simplegank.core.category.dagger.CateGoryMVPModule;
 import com.blanke.simplegank.core.category.dagger.DaggerCateGoryComponent;
 import com.blanke.simplegank.core.category.presenter.CateGoryPresenter;
@@ -29,7 +30,8 @@ import com.blanke.simplegank.core.details.ImgDetailsActivity;
 import com.blanke.simplegank.core.details.WebDetailsActivity;
 import com.blanke.simplegank.utils.AppConfigUtils;
 import com.blanke.simplegank.utils.DateUtils;
-import com.blanke.simplegank.view.CustomSmoothProgressBar;
+import com.cjj.MaterialRefreshLayout;
+import com.cjj.MaterialRefreshListener;
 import com.melnykov.fab.FloatingActionButton;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -49,33 +51,28 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.iwgang.familiarrecyclerview.FamiliarRecyclerView;
-import cn.iwgang.familiarrecyclerview.FamiliarRecyclerViewOnScrollListener;
-
-import static android.view.ViewGroup.LayoutParams;
 
 /**
  * Created by Blanke on 16-1-19.
  */
-public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, List<GankBean>, CateGoryView, CateGoryPresenter> implements CateGoryView, SwipeRefreshLayout.OnRefreshListener {
+public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, List<GankBean>, CateGoryView, CateGoryPresenter>
+        implements CateGoryView {
     public final static String fab_init = "fab_init";
     private final static String KEY_CATEGORY = "category";
-    private static final int PAGE_COUNT = 20;
+    private static final int PAGE_COUNT = StaticData.PAGE_COUNT;
     @Bind(R.id.fragment_cate_recyclerview)
     FamiliarRecyclerView mRecyclerview;
     @Bind(R.id.contentView)
-    SwipeRefreshLayout mSwipeRefreshLayout;
-    private int itemWidthDp = 200;
+    MaterialRefreshLayout mSwipeRefreshLayout;
+    private int itemWidthDp = StaticData.ITEM_WIDTH_DP;
 
     private CateGoryBean mCateGoryBean;
     private RecyclerAdapter mAdapter;
 
     @Inject
     CateGoryPresenter mCateGoryPresenter;
-    private CustomSmoothProgressBar footLoadView;
 
     private boolean isFootLoading = false;
-
-    private long lastLoadTime = 0;
 
     private int page = 1;
     private DisplayImageOptions options;
@@ -107,8 +104,7 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
 
     @Subscriber(tag = fab_init)
     private void initFab(FloatingActionButton fab) {
-//        jumpTop();
-        fab.setOnClickListener(v -> jumpTop());
+        fab.setOnClickListener(v -> mRecyclerview.smoothScrollToPosition(0));
         fab.attachToRecyclerView(mRecyclerview);
     }
 
@@ -128,42 +124,7 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         mRecyclerview.setItemAnimator(new DefaultItemAnimator());
         mAdapter = new RecyclerAdapter();
         mRecyclerview.setAdapter(mAdapter);
-        footLoadView = (CustomSmoothProgressBar) LayoutInflater.from(getActivity()).inflate(R.layout.view_loading_smooth, null);
-        LayoutParams layoutparams = new RecyclerView.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        footLoadView.setLayoutParams(layoutparams);
 
-
-        footLoadView.setSmoothProgressDrawableCallbacks(footLoadView.new CustomCallBack() {
-            @Override
-            public void animStop() {
-                if (isFootLoading == true) {
-                    KLog.d("上拉动画完成，上拉加载完成");
-                    addDataAsyn();//动画完成回调
-                    isFootLoading = false;//停止
-                }
-            }
-        });
-
-
-        mRecyclerview.addFooterView(footLoadView);
-        mRecyclerview.addOnScrollListener(new FamiliarRecyclerViewOnScrollListener(mRecyclerview.getLayoutManager()) {
-            @Override
-            public void onScrolledToTop() {
-
-            }
-
-            @Override
-            public void onScrolledToBottom() {
-                if (isFootLoading == false) {
-                    isFootLoading = true;
-                    KLog.d("滑动到底部，开始上拉加载");
-                    footLoadView.setShow(true);
-                    loadData(true);
-                } else {
-                    KLog.d("滑动到底部，已经开始上拉加载，忽略");
-                }
-            }
-        });
         mRecyclerview.setOnItemClickListener((familiarRecyclerView, view1, position) -> {
             GankBean bean = mAdapter.getData().get(position);
             if (bean.isImage()) {
@@ -173,77 +134,30 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
                 WebDetailsActivity.start(getActivity(), bean);
             }
         });
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setMaterialRefreshListener(new MaterialRefreshListener() {
+            @Override
+            public void onRefresh(MaterialRefreshLayout materialRefreshLayout) {
+                KLog.d("开始下拉刷新事件");
+                page = 1;
+                loadData(true);
+            }
 
-
-        final float[] downRawY = {0};
-
-//        mRecyclerview.setOnTouchListener(new OnTouchListener() {
-//
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                int lastPosition = mRecyclerview.getLastVisiblePosition();
-//                if (downRawY[0] == 0) {
-//                    downRawY[0] = event.getRawY();
-//                }
-//                if (lastPosition == mAdapter.getData().size() - 1) {
-//                    if (event.getAction() == MotionEvent.ACTION_MOVE) {
-//                        float dy = downRawY[0] - event.getRawY();
-//                        footLoadView.setProgress((int) dy);
-//                        if (footLoadView.getProgress() == 100) {
-//                            downRawY[0] = 0;
-//                            mRecyclerview.postDelayed(() -> footLoadView.progressiveStop(), 2000);
-//                        }
-//                    }
-//                }
-//                return false;
-//            }
-//        });
+            @Override
+            public void onRefreshLoadMore(MaterialRefreshLayout materialRefreshLayout) {
+                super.onRefreshLoadMore(materialRefreshLayout);
+                KLog.d("开始上拉刷新事件");
+                isFootLoading = true;
+                loadData(true);
+            }
+        });
 
         loadData(false);
-
-//        mFab.attachToRecyclerView(mRecyclerview);
-//        mFab.setOnClickListener(v->jumpTop());
     }
 
     @Override
     protected int getLayoutRes() {
         return R.layout.fragment_category;
     }
-
-    private void jumpTop() {//跳转到列表最开始
-        jumpToPosition(0);
-    }
-
-    private void jumpBottom() {//跳转到列表最后
-        jumpToPosition(mAdapter.getItemCount());
-    }
-
-    /**
-     * 跳转到列表指定位置
-     *
-     * @param position
-     */
-    private void jumpToPosition(int position) {
-//        ValueAnimator animator = ValueAnimator.ofInt(mRecyclerview.getFirstVisiblePosition(), position);
-//        animator.setDuration(1000);
-//        animator.setInterpolator(new DecelerateInterpolator());
-//        animator.addUpdateListener(animation -> mRecyclerview.smoothScrollToPosition((int) animation.getAnimatedValue()));
-//        animator.start();
-        mRecyclerview.post(() -> mRecyclerview.smoothScrollToPosition(position));
-    }
-
-    private void jumpToShowPosition() {
-        if (mRecyclerview != null && mRecyclerview.isShown()) {
-//            jumpToPosition(mRecyclerview.getLastVisiblePosition() + mRecyclerview.getChildCount() - 4);
-            jumpToPosition(mRecyclerview.getLastVisiblePosition() + 3);
-        }
-    }
-//    @Override
-//    public List<GankBean> getData() {
-//        return mAdapter.getData();
-//    }
 
     @Override
     protected String getErrorMessage(Throwable e, boolean pullToRefresh) {
@@ -263,35 +177,17 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         page++;
         if (!isFootLoading) {//下拉，直接覆盖数据
             mAdapter.setData(newData);
-            mAdapter.notifyDataSetChanged();
-//            mAdapter.notifyItemRangeChanged(0, newData.size());
-        }
-    }
-
-    /**
-     * 上拉刷新的回调，需要等待动画完成后回调插入数据
-     */
-    public void addDataAsyn() {
-        if (newData != null) {
-            int oldLastPosition = mAdapter.getItemCount();
+        } else {
             mAdapter.addData(newData);
-            mAdapter.notifyDataSetChanged();
-//            mAdapter.notifyItemRangeInserted(oldLastPosition, newData.size());
-            jumpToShowPosition();
         }
+        isFootLoading = false;
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void loadData(boolean pullToRefresh) {
-        lastLoadTime = System.currentTimeMillis();
-        KLog.d("开始加载数据  是否是手动刷新:" + pullToRefresh);
+        KLog.d("开始加载数据  是否是第一次自动加载:" + !pullToRefresh);
         mCateGoryPresenter.loadGank(pullToRefresh, mCateGoryBean, PAGE_COUNT, page);
-    }
-
-    @Override
-    public void onRefresh() {//下拉
-        page = 1;
-        loadData(true);
     }
 
     private DisplayImageOptions getImageOptions() {
@@ -317,26 +213,17 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
     @Override
     public void stopRefreshing() {
         KLog.d("刷新结束");
-        mSwipeRefreshLayout.setRefreshing(false);
-        if (isFootLoading) {
-            if (System.currentTimeMillis() - lastLoadTime >= 3 * 1000 * 1000) {
-                footLoadView.setShow(false);
-            } else {
-                footLoadView.postDelayed(() -> footLoadView.setShow(false), 3000);//延迟，防止刷新时间过短
-            }
-        }
+        mSwipeRefreshLayout.finishRefresh();
+        mSwipeRefreshLayout.finishRefreshLoadMore();
     }
 
     @Override
     public void onFail(Throwable e) {
-        Snackbar.make(mRecyclerview, e.toString(), Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+        Snackbar.make(mRecyclerview, e.toString(), Snackbar.LENGTH_LONG).show();
     }
-
 
     class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private List<GankBean> data;
-        private int layoutId;
 
         public List<GankBean> getData() {
             return data;
@@ -347,6 +234,13 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
                 this.data = new ArrayList<>();
             } else {
                 this.data.clear();
+            }
+            this.data.addAll(data);
+        }
+
+        public void addData(List<GankBean> data) {
+            if (this.data == null) {
+                this.data = new ArrayList<>();
             }
             this.data.addAll(data);
         }
@@ -381,12 +275,6 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
             return data == null ? 0 : data.size();
         }
 
-        public void addData(List<GankBean> data) {
-            if (this.data == null) {
-                this.data = new ArrayList<>();
-            }
-            this.data.addAll(data);
-        }
 
         @Override
         public int getItemViewType(int position) {

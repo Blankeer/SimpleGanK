@@ -31,10 +31,10 @@ public class CateGoryPresenterImpl extends CateGoryPresenter {
         if (isViewAttached()) {
             KLog.d("数据获取完成，data.size=" + data.size());
             getView().setData(data);
-            getView().showContent();
-            if (pullToRefresh) {
-                getView().stopRefreshing();
+            if (!pullToRefresh) {
+                getView().showContent();
             }
+            getView().stopRefreshing();
         }
     }
 
@@ -42,11 +42,11 @@ public class CateGoryPresenterImpl extends CateGoryPresenter {
     public void onFail(Throwable e) {
         if (isViewAttached()) {
             KLog.d("数据获取失败，error:" + e.getMessage());
-            getView().showError(e, pullToRefresh);
-            if (pullToRefresh) {
-                getView().stopRefreshing();
-                getView().onFail(e);
-            }
+//            getView().showError(e, pullToRefresh);
+//            if (pullToRefresh) {
+            getView().stopRefreshing();
+            getView().onFail(e);
+//            }
         }
     }
 }
