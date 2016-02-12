@@ -2,9 +2,6 @@ package com.blanke.simplegank.base;
 
 import android.support.v7.app.AppCompatActivity;
 
-import com.blanke.simplegank.app.BaseApplication;
-import com.squareup.leakcanary.RefWatcher;
-
 import butterknife.ButterKnife;
 
 /**
@@ -23,7 +20,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
-        RefWatcher refWatcher = BaseApplication.getRefWatcher(this);
-        refWatcher.watch(this);
+//        RefWatcher refWatcher = BaseApplication.getRefWatcher(this);
+//        refWatcher.watch(this);
     }
 }

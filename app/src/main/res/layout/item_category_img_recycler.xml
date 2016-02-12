@@ -8,6 +8,7 @@
         android:id="@+id/item_cate_card_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:scaleType="centerCrop"
+        android:scaleType="center"
+        android:src="@drawable/load"
         android:transitionName="@string/share_img" />
 </android.support.v7.widget.CardView>

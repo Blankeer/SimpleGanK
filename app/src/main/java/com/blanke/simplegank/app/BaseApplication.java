@@ -7,7 +7,6 @@ import com.blanke.simplegank.consts.StaticData;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
-import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
 import java.io.IOException;
@@ -33,7 +32,7 @@ public class BaseApplication extends Application {
         initComponent();
         initImageLoader();
 
-        refWatcher = LeakCanary.install(this);
+//        refWatcher = LeakCanary.install(this);
     }
 
     private void initData() {

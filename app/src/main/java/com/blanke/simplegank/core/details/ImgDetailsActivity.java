@@ -26,6 +26,8 @@ import com.blanke.simplegank.utils.ResUtils;
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 
+import java.lang.ref.WeakReference;
+
 import butterknife.Bind;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -78,29 +80,39 @@ public class ImgDetailsActivity extends BaseActivity {
 
         PhotoViewAttacher mAttacher = new PhotoViewAttacher(mImageView);
         mAttacher.setOnLongClickListener(v -> {
-            new MsgDialog(ResUtils.getResString(ImgDetailsActivity.this, R.string.msg_down_img))
+            new MsgDialog(mBitmap, mImageView, mGankBean, ResUtils.getResString(ImgDetailsActivity.this, R.string.msg_down_img))
                     .show(getSupportFragmentManager(), "dialog");
             return false;
         });
         mAttacher.setOnViewTapListener((view, x, y) -> onBackPressed());
     }
 
-    class MsgDialog extends DialogFragment {
+    static class MsgDialog extends DialogFragment {
         String title;
+        Bitmap bitmap;
+        GankBean gankBean;
+        WeakReference<ImageView> imageViewWeakReference;
 
-        public MsgDialog(String title) {
+        public MsgDialog(Bitmap bitmap, ImageView imageView, GankBean gankBean, String title) {
+            this.bitmap = bitmap;
+            this.gankBean = gankBean;
             this.title = title;
+            imageViewWeakReference = new WeakReference<>(imageView);
         }
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
+            ImageView imageView = imageViewWeakReference.get();
+            if (imageView == null) {
+                return null;
+            }
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage(title);
             builder.setPositiveButton("确定", (dialog, id) -> {
-                BitmapUtils.savaImage(ImgDetailsActivity.this, mBitmap, mGankBean.getUrlName())
+                BitmapUtils.savaImage(imageView.getContext(), bitmap, gankBean.getUrlName())
                         .subscribe(aBoolean -> {
-                            if (mImageView != null) {
-                                Snackbar.make(mImageView, aBoolean ? R.string.msg_down_img_ok : R.string.msg_down_img_error, Snackbar.LENGTH_SHORT)
+                            if (imageView != null) {
+                                Snackbar.make(imageView, aBoolean ? R.string.msg_down_img_ok : R.string.msg_down_img_error, Snackbar.LENGTH_SHORT)
                                         .show();
                             }
                         });
