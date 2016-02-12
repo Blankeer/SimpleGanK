@@ -119,7 +119,7 @@ public class MainActivity extends BaseActivity {
                 }
             });
         }
-
+//        mTestLayout.setLayerInteractionEnabled(true);
     }
 
 

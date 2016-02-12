@@ -4,7 +4,7 @@ import com.blanke.simplegank.core.category.model.CateGoryModel;
 import com.blanke.simplegank.core.category.model.CateGoryModelImpl;
 import com.blanke.simplegank.core.category.presenter.CateGoryPresenter;
 import com.blanke.simplegank.core.category.presenter.CateGoryPresenterImpl;
-import com.blanke.simplegank.core.retrofit.GankApi;
+import com.blanke.simplegank.core.category.retrofit.GankApi;
 
 import dagger.Module;
 import dagger.Provides;

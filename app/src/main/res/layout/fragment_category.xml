@@ -8,6 +8,7 @@
         android:id="@+id/contentView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
         app:isLoadMore="true"
         app:overlay="true"

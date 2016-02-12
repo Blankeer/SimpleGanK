@@ -1,4 +1,4 @@
-package com.blanke.simplegank.core.retrofit;
+package com.blanke.simplegank.core.category.retrofit;
 
 import com.blanke.simplegank.bean.BaseGankResponseBean;
 import com.blanke.simplegank.consts.StaticData;

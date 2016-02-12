@@ -8,7 +8,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 /**
  * Created by Blanke on 16-1-19.
  */
-public abstract class CateGoryPresenter extends MvpBasePresenter<CateGoryView> implements CateGoryModel.CallBack {
+public abstract class CateGoryPresenter extends MvpBasePresenter<CateGoryView> {
     protected CateGoryModel mCateGoryModel;
 
     public CateGoryPresenter(CateGoryModel mCateGoryModel) {

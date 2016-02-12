@@ -98,9 +98,12 @@ public class ImgDetailsActivity extends BaseActivity {
             builder.setMessage(title);
             builder.setPositiveButton("确定", (dialog, id) -> {
                 BitmapUtils.savaImage(ImgDetailsActivity.this, mBitmap, mGankBean.getUrlName())
-                        .subscribe(aBoolean ->
+                        .subscribe(aBoolean -> {
+                            if (mImageView != null) {
                                 Snackbar.make(mImageView, aBoolean ? R.string.msg_down_img_ok : R.string.msg_down_img_error, Snackbar.LENGTH_SHORT)
-                                        .show());
+                                        .show();
+                            }
+                        });
                 dialog.dismiss();
             });
             builder.setNegativeButton("取消", (dialog, id) -> {

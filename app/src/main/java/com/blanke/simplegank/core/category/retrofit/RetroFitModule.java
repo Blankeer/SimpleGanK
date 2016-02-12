@@ -1,4 +1,4 @@
-package com.blanke.simplegank.core.retrofit;
+package com.blanke.simplegank.core.category.retrofit;
 
 import com.blanke.simplegank.consts.StaticData;
 import com.google.gson.GsonBuilder;

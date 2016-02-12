@@ -5,15 +5,12 @@ import com.blanke.simplegank.bean.GankBean;
 
 import java.util.List;
 
+import rx.Observable;
+
 /**
  * Created by Blanke on 16-1-19.
  */
 public abstract class CateGoryModel {
-    public interface CallBack {
-        void onSuccess(List<GankBean> data);
 
-        void onFail(Throwable e);
-    }
-
-    public abstract void loadGank(CateGoryBean cateGory, int size, int page, CateGoryModel.CallBack callBack);
+    public abstract Observable<List<GankBean>> loadGank(CateGoryBean cateGory, int size, int page);
 }

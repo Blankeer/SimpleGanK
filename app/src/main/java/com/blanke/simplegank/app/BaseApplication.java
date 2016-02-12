@@ -7,6 +7,8 @@ import com.blanke.simplegank.consts.StaticData;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 import java.io.IOException;
 
@@ -17,12 +19,21 @@ public class BaseApplication extends Application {
 
     private AppComponent mAppComponent;
 
+    public static RefWatcher getRefWatcher(Context context) {
+        BaseApplication application = (BaseApplication) context.getApplicationContext();
+        return application.refWatcher;
+    }
+
+    private RefWatcher refWatcher;
+
     @Override
     public void onCreate() {
         super.onCreate();
         initData();
         initComponent();
         initImageLoader();
+
+        refWatcher = LeakCanary.install(this);
     }
 
     private void initData() {

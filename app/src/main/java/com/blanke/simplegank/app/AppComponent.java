@@ -1,7 +1,7 @@
 package com.blanke.simplegank.app;
 
-import com.blanke.simplegank.core.retrofit.GankApi;
-import com.blanke.simplegank.core.retrofit.RetroFitModule;
+import com.blanke.simplegank.core.category.retrofit.GankApi;
+import com.blanke.simplegank.core.category.retrofit.RetroFitModule;
 
 import dagger.Component;
 

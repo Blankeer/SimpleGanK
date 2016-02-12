@@ -22,11 +22,10 @@ public class CateGoryPresenterImpl extends CateGoryPresenter {
     public void loadGank(boolean pullToRefresh, CateGoryBean cateGory, int size, int page) {
         this.pullToRefresh = pullToRefresh;
         getView().showLoading(pullToRefresh);
-        mCateGoryModel.loadGank(cateGory, size, page, this);
+        mCateGoryModel.loadGank(cateGory, size, page).subscribe(this::onSuccess, this::onFail);
     }
 
 
-    @Override
     public void onSuccess(List<GankBean> data) {
         if (isViewAttached()) {
             KLog.d("数据获取完成，data.size=" + data.size());
@@ -38,7 +37,6 @@ public class CateGoryPresenterImpl extends CateGoryPresenter {
         }
     }
 
-    @Override
     public void onFail(Throwable e) {
         if (isViewAttached()) {
             KLog.d("数据获取失败，error:" + e.getMessage());

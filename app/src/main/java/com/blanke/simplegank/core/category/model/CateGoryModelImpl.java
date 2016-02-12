@@ -1,8 +1,12 @@
 package com.blanke.simplegank.core.category.model;
 
 import com.blanke.simplegank.bean.CateGoryBean;
-import com.blanke.simplegank.core.retrofit.GankApi;
+import com.blanke.simplegank.bean.GankBean;
+import com.blanke.simplegank.core.category.retrofit.GankApi;
 
+import java.util.List;
+
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -17,11 +21,10 @@ public class CateGoryModelImpl extends CateGoryModel {
     }
 
     @Override
-    public void loadGank(CateGoryBean cateGory, int size, int page, CallBack callBack) {
-        mGankApi.getGankList(cateGory.getPath(), size, page)
+    public Observable<List<GankBean>> loadGank(CateGoryBean cateGory, int size, int page) {
+        return mGankApi.getGankList(cateGory.getPath(), size, page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
-                .map(response -> response.getResults())
-                .subscribe(callBack::onSuccess, callBack::onFail);
+                .map(response -> response.getResults());
     }
 }

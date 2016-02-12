@@ -74,3 +74,6 @@ http://p.codekk.com/detail/Android/square/leakcanary
 23 MaterialRefreshLayout
     compile 'com.cjj.materialrefeshlayout:library:1.3.0'
     https://github.com/android-cjj/Android-MaterialRefreshLayout/blob/master/README-cn.md
+
+24 内存泄露检测
+https://github.com/square/leakcanary
