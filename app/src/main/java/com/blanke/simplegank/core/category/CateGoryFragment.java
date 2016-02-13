@@ -30,6 +30,7 @@ import com.blanke.simplegank.core.details.ImgDetailsActivity;
 import com.blanke.simplegank.core.details.WebDetailsActivity;
 import com.blanke.simplegank.utils.AppConfigUtils;
 import com.blanke.simplegank.utils.DateUtils;
+import com.blanke.simplegank.utils.ResUtils;
 import com.cjj.MaterialRefreshLayout;
 import com.cjj.MaterialRefreshListener;
 import com.melnykov.fab.FloatingActionButton;
@@ -161,7 +162,8 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
 
     @Override
     protected String getErrorMessage(Throwable e, boolean pullToRefresh) {
-        return e.getMessage();
+//        return e.getMessage();
+        return ResUtils.getResString(getActivity(), R.string.msg_network_error);
     }
 
     @Override
@@ -219,7 +221,7 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
 
     @Override
     public void onFail(Throwable e) {
-        Snackbar.make(mRecyclerview, e.toString(), Snackbar.LENGTH_LONG).show();
+        Snackbar.make(mRecyclerview, getErrorMessage(e, false), Snackbar.LENGTH_LONG).show();
     }
 
     class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -290,7 +292,6 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
         TextView mTextViewTag;
         @Bind(R.id.item_cate_card_time)
         TextView mTextViewTime;
-
 
         public TextViewHolder(View itemView) {
             super(itemView);
