@@ -3,4 +3,5 @@
 * Retrofit
 * Dagger2
 * RxJava
+---
 ![gif](https://github.com/Blankeer/SimpleGanK/blob/master/gank.gif)
