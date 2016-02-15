@@ -32,19 +32,21 @@ public class CateGoryPresenterImpl extends CateGoryPresenter {
             getView().setData(data);
             if (!pullToRefresh) {
                 getView().showContent();
+            } else {
+                getView().stopRefreshing();
             }
-            getView().stopRefreshing();
         }
     }
 
     public void onFail(Throwable e) {
         if (isViewAttached()) {
             KLog.d("数据获取失败，error:" + e.getMessage());
-//            getView().showError(e, pullToRefresh);
-//            if (pullToRefresh) {
-            getView().stopRefreshing();
-            getView().onFail(e);
-//            }
+            if (!pullToRefresh) {
+                getView().showError(e, pullToRefresh);
+            } else {
+                getView().stopRefreshing();
+                getView().onFail(e);
+            }
         }
     }
 }

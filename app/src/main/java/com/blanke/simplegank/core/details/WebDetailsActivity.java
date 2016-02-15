@@ -35,10 +35,12 @@ public class WebDetailsActivity extends BaseActivity {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static void start(Activity activity, GankBean bean) {
-        Explode mExplode = new Explode();
-        mExplode.setDuration(500);
-        activity.getWindow().setExitTransition(mExplode);
-        activity.getWindow().setEnterTransition(mExplode);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Explode mExplode = new Explode();
+            mExplode.setDuration(500);
+            activity.getWindow().setExitTransition(mExplode);
+            activity.getWindow().setEnterTransition(mExplode);
+        }
         ActivityOptionsCompat optionsCompat2 = ActivityOptionsCompat.makeSceneTransitionAnimation(activity);
         Intent intent2 = new Intent(activity, WebDetailsActivity.class);
         intent2.putExtra(WebDetailsActivity.ARG_NAME, bean);
@@ -51,11 +53,12 @@ public class WebDetailsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_details);
 
-        Explode mExplode = new Explode();
-        mExplode.setDuration(500);
-        getWindow().setExitTransition(mExplode);
-        getWindow().setEnterTransition(mExplode);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Explode mExplode = new Explode();
+            mExplode.setDuration(500);
+            getWindow().setExitTransition(mExplode);
+            getWindow().setEnterTransition(mExplode);
+        }
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -79,7 +82,7 @@ public class WebDetailsActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 if (mSmoothProgressBar != null) {
-                    mSmoothProgressBar.postDelayed(() -> mSmoothProgressBar.setShow(false), 1000);
+                    mSmoothProgressBar.setShow(false);
                 }
             }
         });

@@ -48,7 +48,7 @@ public class BaseApplication extends Application {
     private void initImageLoader() {
         ImageLoaderConfiguration config = new ImageLoaderConfiguration
                 .Builder(this)
-                .memoryCacheExtraOptions(600, 800)
+                .memoryCacheExtraOptions(800,1000)
                 .imageDownloader(new BaseImageDownloader(this, 5 * 1000, 10 * 1000))
 //                .writeDebugLogs()
                 .build();
