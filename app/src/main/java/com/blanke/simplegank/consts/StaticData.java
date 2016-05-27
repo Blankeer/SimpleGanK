@@ -19,7 +19,7 @@ import java.util.TreeSet;
  * Created by blanke on 16-1-18.
  */
 public class StaticData {
-    public static final String ROOT_URL = "http://gank.avosapps.com/";
+    public static final String ROOT_URL = "http://gank.io/";
     public static final String GANK_URL = "api/data/";
     public static final String GANK_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
     private static TreeSet<CateGoryBean> cateGoryBeens = null;

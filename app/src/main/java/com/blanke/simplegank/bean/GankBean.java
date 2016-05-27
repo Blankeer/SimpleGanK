@@ -25,14 +25,13 @@ public class GankBean implements Parcelable {
      */
 
     private String who;
-    private String publishedAt;
+    private Date publishedAt;
     private String desc;
     private String type;
     private String url;
     private boolean used;
-    private String objectId;
+    private String _id;
     private Date createdAt;
-    private Date updatedAt;
 
     private boolean isImage = false;//是否是图片
 
@@ -40,9 +39,6 @@ public class GankBean implements Parcelable {
         this.who = who;
     }
 
-    public void setPublishedAt(String publishedAt) {
-        this.publishedAt = publishedAt;
-    }
 
     public void setDesc(String desc) {
         this.desc = desc;
@@ -74,9 +70,6 @@ public class GankBean implements Parcelable {
         this.used = used;
     }
 
-    public void setObjectId(String objectId) {
-        this.objectId = objectId;
-    }
 
     public Date getCreatedAt() {
         return createdAt;
@@ -86,21 +79,11 @@ public class GankBean implements Parcelable {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 
     public String getWho() {
         return who;
     }
 
-    public String getPublishedAt() {
-        return publishedAt;
-    }
 
     public String getDesc() {
         return desc;
@@ -124,10 +107,6 @@ public class GankBean implements Parcelable {
         return used;
     }
 
-    public String getObjectId() {
-        return objectId;
-    }
-
 
     @Override
     public String toString() {
@@ -138,11 +117,31 @@ public class GankBean implements Parcelable {
                 ", type='" + type + '\'' +
                 ", url='" + url + '\'' +
                 ", used=" + used +
-                ", objectId='" + objectId + '\'' +
+                ", objectId='" + _id + '\'' +
                 ", createdAt='" + createdAt + '\'' +
-                ", updatedAt='" + updatedAt + '\'' +
                 '}';
     }
+
+    public Date getPublishedAt() {
+        return publishedAt;
+    }
+
+    public void setPublishedAt(Date publishedAt) {
+        this.publishedAt = publishedAt;
+    }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+
+
+    public GankBean() {
+    }
+
 
     @Override
     public int describeContents() {
@@ -152,40 +151,38 @@ public class GankBean implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.who);
-        dest.writeString(this.publishedAt);
+        dest.writeLong(this.publishedAt != null ? this.publishedAt.getTime() : -1);
         dest.writeString(this.desc);
         dest.writeString(this.type);
         dest.writeString(this.url);
-        dest.writeByte(used ? (byte) 1 : (byte) 0);
-        dest.writeString(this.objectId);
-        dest.writeLong(createdAt != null ? createdAt.getTime() : -1);
-        dest.writeLong(updatedAt != null ? updatedAt.getTime() : -1);
-        dest.writeByte(isImage ? (byte) 1 : (byte) 0);
-    }
-
-    public GankBean() {
+        dest.writeByte(this.used ? (byte) 1 : (byte) 0);
+        dest.writeString(this._id);
+        dest.writeLong(this.createdAt != null ? this.createdAt.getTime() : -1);
+        dest.writeByte(this.isImage ? (byte) 1 : (byte) 0);
     }
 
     protected GankBean(Parcel in) {
         this.who = in.readString();
-        this.publishedAt = in.readString();
+        long tmpPublishedAt = in.readLong();
+        this.publishedAt = tmpPublishedAt == -1 ? null : new Date(tmpPublishedAt);
         this.desc = in.readString();
         this.type = in.readString();
         this.url = in.readString();
         this.used = in.readByte() != 0;
-        this.objectId = in.readString();
+        this._id = in.readString();
         long tmpCreatedAt = in.readLong();
         this.createdAt = tmpCreatedAt == -1 ? null : new Date(tmpCreatedAt);
         long tmpUpdatedAt = in.readLong();
-        this.updatedAt = tmpUpdatedAt == -1 ? null : new Date(tmpUpdatedAt);
         this.isImage = in.readByte() != 0;
     }
 
     public static final Parcelable.Creator<GankBean> CREATOR = new Parcelable.Creator<GankBean>() {
+        @Override
         public GankBean createFromParcel(Parcel source) {
             return new GankBean(source);
         }
 
+        @Override
         public GankBean[] newArray(int size) {
             return new GankBean[size];
         }

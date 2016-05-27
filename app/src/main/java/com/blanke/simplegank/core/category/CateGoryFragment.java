@@ -265,7 +265,7 @@ public class CateGoryFragment extends BaseMvpLceFragment<SwipeRefreshLayout, Lis
                 TextViewHolder textholder = (TextViewHolder) holder;
                 textholder.mTextViewTitle.setText(bean.getDesc());
                 textholder.mTextViewTag.setText(bean.getType());
-                textholder.mTextViewTime.setText(DateUtils.getTimestampString(bean.getUpdatedAt()));
+                textholder.mTextViewTime.setText(DateUtils.getTimestampString(bean.getPublishedAt()));
             } else {
                 ImgViewHolder imgViewHolder = (ImgViewHolder) holder;
                 ImageLoader.getInstance().displayImage(bean.getUrl(), imgViewHolder.mImageView, getImageOptions());
